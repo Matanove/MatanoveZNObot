@@ -5,6 +5,7 @@ import pymysql
 from collections import deque
 import math
 
+TOKEN = '1184413942:AAFUBjVItCCweXDXbMEBp8thmlqS8RM3_vw'
 bot = telebot.TeleBot(TOKEN)
 
 q = deque()
@@ -22,6 +23,7 @@ add_lvls_list = [0, 0, 0, 0, 0]
 antirepeat = [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]
 PrevHelloMessageId = 101437  # рандомні цифри, номер повідомлення
 NewHelloMessageId = 101438  # message_id
+sqldb = host="matanovezno.mysql.pythonanywhere-services.com", user="matanovezno", password="P@ssw0rd", database="matanovezno$Matanove"
 helloText = """Вітаю в @matan_help ✋
 Головні правила чату:
 ➡️Не ображати інших учасників
@@ -201,7 +203,7 @@ def top_10(message):
     sort = message.text[5:]
     sort = sort.replace(" ", "")
     # print(sort)
-    conn = pymysql.connect(host="localhost", user="andrii", password="password", database="Matanove")
+    conn = pymysql.connect(sqldb)
     cur = conn.cursor()
     if sort == "msg":
         msg = str('Рейтинг за кілкістю повідомлень\n')
@@ -351,7 +353,7 @@ def queue(message):
         q.append(message)
         while len(q) > 0:
             mssg = q.popleft()
-            conn = pymysql.connect(host="localhost", user="andrii", password="password", database="Matanove")
+            conn = pymysql.connect(sqldb)
             cur = conn.cursor()
             name = (str(mssg.from_user.first_name), "")[str(mssg.from_user.first_name) == "None"]
             surname = (str(mssg.from_user.last_name), "")[str(mssg.from_user.last_name) == "None"]
@@ -386,7 +388,7 @@ def queue(message):
 
 def intelligence(message, intel):
     # print(intel)
-    conn = pymysql.connect(host="localhost", user="andrii", password="password", database="Matanove")
+    conn = pymysql.connect(sqldb)
     cur = conn.cursor()
     user_id = message.from_user.id
     query = "UPDATE `stat` SET `intel` = `intel` + {} WHERE `user_id` = '{}'".format(intel, user_id)
