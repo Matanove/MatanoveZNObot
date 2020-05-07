@@ -5,8 +5,6 @@ import pymysql
 from collections import deque
 import math
 
-# TOKEN = '1184413942:AAFUBjVItCCweXDXbMEBp8thmlqS8RM3_vw'
-TOKEN = '983398971:AAEntwnL_UsqYfMEbXq7mR-Z5nGRXC_fGK0'
 bot = telebot.TeleBot(TOKEN)
 
 q = deque()
