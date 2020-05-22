@@ -85,8 +85,7 @@ def report_message(message):
         bot.reply_to(message, '@mataner @andead422 @dimaborak @Gazelka @MatHtaM @melkii_pumba')
     except:
         pass
-    if message.chat.type == 'supergroup':
-        bot.send_message(-1001418192939, 'Розбійник в @matan_help')
+    bot.send_message(-1001418192939, 'Розбійник в @matan_help')
 
 
 @bot.message_handler(commands=['question'])
@@ -95,8 +94,7 @@ def question_message(message):
         bot.reply_to(message, '@mataner @andead422 @dimaborak @Gazelka @MatHtaM @melkii_pumba')
     except:
         pass
-    if message.chat.type == 'supergroup':
-        bot.send_message(-1001418192939, 'Дебіл в @matan_help')
+    bot.send_message(-1001418192939, 'Дебіл в @matan_help')
 
 
 # @bot.message_handler(commands=['parameters'])
