@@ -65,7 +65,10 @@ def start_message(message):
 # команди
 @bot.message_handler(commands=['help'])
 def help_message(message):
-    bot.send_message(message.chat.id, helpText)
+    try:
+        bot.send_message(message.chat.id, helpText)
+    except:
+        pass
 
 
 def trueRandom(a, lvl):
@@ -92,9 +95,10 @@ def report_message(message):
 def question_message(message):
     try:
         bot.reply_to(message, '@mataner @andead422 @dimaborak @Gazelka @MatHtaM @melkii_pumba')
+        bot.send_message(-1001418192939, 'Дебіл в @matan_help')
     except:
         pass
-    bot.send_message(-1001418192939, 'Дебіл в @matan_help')
+
 
 
 # @bot.message_handler(commands=['parameters'])
@@ -146,9 +150,9 @@ def task_text(message):
         file = open(path, 'rb')
         try:
             bot.send_photo(message.chat.id, file,
-                       caption='Відповіддю є число в десятковому записі. Відповідь округлюється до трьох знаків після коми за правилами округлення.\nРівень складності: ' + str(
-                           level) + '\nПриклад: 16; -38,8; 0; 44.268. \nТермін виконання - ' + str(
-                           level * 10) + ' хвилин')
+                      caption='Відповіддю є число в десятковому записі. Відповідь округлюється до трьох знаків після коми за правилами округлення.\nРівень складності: ' + str(
+                          level) + '\nПриклад: 16; -38,8; 0; 44.268. \nТермін виконання - ' + str(
+                          level * 10) + ' хвилин')
         except:
             pass
         isSolving = True
@@ -293,7 +297,7 @@ def add_command(message):
                                     'video', 'location', 'contact', 'new_chat_members', 'left_chat_member'""])
 def sorting(message):
     if message.chat.id != -1001382702607 and message.chat.id != -1001415917929 and message.chat.id != -1001418192939 and message.chat.id != -458266883:
-        # print(message.chat.id)
+        print(message.chat.id)
         bot.leave_chat(message.chat.id)
     else:
         queue(message)
@@ -321,6 +325,7 @@ def hello_message(message):
         bot.delete_message(message.chat.id, PrevHelloMessageId)
     except:
         pass
+
 
 def send_text(message):
     global isSolving
@@ -386,8 +391,9 @@ def handle_docs_photo(message):
 
 
 def queue(message):
-    # if message.chat.id == -1001415917929:
-    if message.chat.id == -1001418192939:
+    if message.chat.id == -1001415917929 and message.from_user.id != 777000:    #Matanove 
+    # if message.chat.id == -458266883 and message.from_user.id != 777000:    #testgroup
+    # if message.chat.id == -1001418192939 and message.from_user.id != 777000:    #troll
         q.append(message)
         while len(q) > 0:
             mssg = q.popleft()
@@ -425,15 +431,22 @@ def queue(message):
 
 
 def intelligence(message, intel):
-    # print(intel)
-    conn = pymysql.connect(host="matanovezno.mysql.pythonanywhere-services.com", user="matanovezno", password="P@ssw0rd", database="matanovezno$Matanove")
-    cur = conn.cursor()
-    user_id = message.from_user.id
-    query = "UPDATE `stat` SET `intel` = `intel` + {} WHERE `user_id` = '{}'".format(intel, user_id)
-    # print(query)
-    cur.execute(query)
-    conn.commit()
-    cur.close()
+    if message.chat.id == -1001415917929 and message.from_user.id != 777000:    # Matanove
+    # if message.chat.id == -1001418192939 and message.from_user.id != 777000:    #troll
+        try:
+            # print(intel)
+            conn = pymysql.connect(host="matanovezno.mysql.pythonanywhere-services.com", user="matanovezno", password="P@ssw0rd", database="matanovezno$Matanove")
+            cur = conn.cursor()
+            user_id = message.from_user.id
+            query = "UPDATE `stat` SET `intel` = `intel` + {} WHERE `user_id` = '{}'".format(intel, user_id)
+            # print(query)
+            cur.execute(query)
+            conn.commit()
+            cur.close()
+        except:
+            pass
+    else:
+        pass
 
 
 bot.infinity_polling()
