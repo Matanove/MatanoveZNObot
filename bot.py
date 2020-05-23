@@ -432,6 +432,7 @@ def queue(message):
 
 def intelligence(message, intel):
     if message.chat.id == -1001415917929 and message.from_user.id != 777000:    # Matanove
+    # if message.chat.id == -458266883 and message.from_user.id != 777000:    #testgroup
     # if message.chat.id == -1001418192939 and message.from_user.id != 777000:    #troll
         try:
             # print(intel)
