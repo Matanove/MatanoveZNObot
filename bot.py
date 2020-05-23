@@ -86,9 +86,9 @@ def trueRandom(a, lvl):
 def report_message(message):
     try:
         bot.reply_to(message, '@mataner @andead422 @dimaborak @Gazelka @MatHtaM @melkii_pumba')
+        bot.send_message(-1001418192939, 'Розбійник в @matan_help')
     except:
         pass
-    bot.send_message(-1001418192939, 'Розбійник в @matan_help')
 
 
 @bot.message_handler(commands=['question'])
