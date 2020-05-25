@@ -80,8 +80,8 @@ def pts():
 def start_message(message):
     try:
         bot.send_message(message.chat.id, 'Привіт! Я допомагаю в групі  @matan_help')
-    except AttributeError:
-        bot.send_message(416859943, 'start')
+    except:
+        pass
 
 
 # команди
@@ -89,8 +89,8 @@ def start_message(message):
 def help_message(message):
     try:
         bot.send_message(message.chat.id, helpText)
-    except AttributeError:
-        bot.send_message(416859943, 'help')
+    except:
+        pass
 
 
 def trueRandom(a, lvl):
@@ -109,8 +109,8 @@ def report_message(message):
     try:
         bot.reply_to(message, '@mataner @andead422 @dimaborak @Gazelka @MatHtaM @melkii_pumba')
         bot.send_message(-1001418192939, 'Розбійник в @matan_help')
-    except AttributeError:
-        bot.send_message(416859943, 'report')
+    except:
+        pass
 
 
 @bot.message_handler(commands=['question'])
@@ -118,8 +118,8 @@ def question_message(message):
     try:
         bot.reply_to(message, '@mataner @andead422 @dimaborak @Gazelka @MatHtaM @melkii_pumba')
         bot.send_message(-1001418192939, 'Дебіл в @matan_help')
-    except AttributeError:
-        bot.send_message(416859943, 'question')
+    except:
+        pass
 
 
 
@@ -175,8 +175,8 @@ def task_text(message):
                       caption='Відповіддю є число в десятковому записі. Відповідь округлюється до трьох знаків після коми за правилами округлення.\nРівень складності: ' + str(
                           level) + '\nПриклад: 16; -38,8; 0; 44.268. \nТермін виконання - ' + str(
                           level * 10) + ' хвилин')
-        except AttributeError:
-            bot.send_message(416859943, 'task 1')
+        except:
+            pass
         isSolving = True
         path2 = "/home/test1bot/Data/Tasks/Solutions/" + str(level) + "/sol.txt"
         counter = 0
@@ -193,14 +193,14 @@ def task_text(message):
         file = open(path, 'rb')
         try:
             bot.send_photo(message.chat.id, file, caption=r"Спочатку розв'яжіть запропоновану задачу!")
-        except AttributeError:
-            bot.send_message(416859943, 'task 2')
+        except:
+            pass
     else:
         try:
             bot.reply_to(message,
                      'Вказані невірні аргументи. Аргументом може слугувати лише число від 1 до 4 включно, де число позначає складність завдання')
-        except AttributeError:
-            bot.send_message(416859943, 'task error')
+        except:
+            pass
         return 0
 
 
@@ -266,8 +266,8 @@ def top_10(message):
         # print(msg)
         try:
             bot.reply_to(message, msg, parse_mode="HTML")
-        except AttributeError:
-            bot.send_message(416859943, 'top msg')
+        except:
+            pass
     elif sort == "intel":
         msg = str('Інтелектуальний рейтинг\n')
         cur.execute(
@@ -284,14 +284,14 @@ def top_10(message):
         # print(msg)
         try:
             bot.reply_to(message, msg, parse_mode="HTML")
-        except AttributeError:
-            bot.send_message(416859943, 'top intel')
+        except:
+            pass
     else:
         try:
             bot.reply_to(message,
                          'Вказані невірні аргументи. Аргументом може слугувати лише msg або intel')
-        except AttributeError:
-            bot.send_message(416859943, 'top error')
+        except:
+            pass
     conn.commit()
     cur.close()
 
@@ -379,8 +379,8 @@ def send_text(message):
                          '<b>Вітаємо!</b> <i>Ви першим розв\'язали задачу рівня ' + str(level) + ' за <b>' + str(
                              int(tm1) - int(tm)) + ' с</b>, і отримуєте</i> <b>+' + str(
                              pts()) + '</b> <i>до Вашого інтелектуального рейтингу</i>', parse_mode="HTML")
-            except AttributeError:
-                bot.send_message(416859943, 'right answer')
+                except:
+                    pass
             isSolving = False
             intelligence(message, pts())
 
