@@ -34,6 +34,28 @@ helpText = """ /report - повідомити про порушення
 /question - якщо виникло питання
 /task [складність]- розв'язуй задачі, стань першим в рейтингу(складність варіюється від 1 до 4, де 1-найлегший рівень)
 /top [msg або intel]- топ 10 учасників чату(msg-сортування за кілкістю повідомлень, intel-за інтелектуальним рейтингом)"""
+HELLO_WORLD = """<html>
+<head>
+    <title>matanovezno</title>
+</head>
+<body>
+<p>
+    This page is under construction
+</p>
+</body>
+</html>"""
+
+
+def application(environ, start_response):
+    if environ.get('PATH_INFO') == '/':
+        status = '200 OK'
+        content = HELLO_WORLD
+    else:
+        status = '404 NOT FOUND'
+        content = 'Page not found.'
+    response_headers = [('Content-Type', 'text/html'), ('Content-Length', str(len(content)))]
+    start_response(status, response_headers)
+    yield content.encode('utf8')
 
 
 def rnd(x):
@@ -58,8 +80,8 @@ def pts():
 def start_message(message):
     try:
         bot.send_message(message.chat.id, 'Привіт! Я допомагаю в групі  @matan_help')
-    except:
-        pass
+    except AttributeError:
+        bot.send_message(416859943, 'start')
 
 
 # команди
@@ -67,8 +89,8 @@ def start_message(message):
 def help_message(message):
     try:
         bot.send_message(message.chat.id, helpText)
-    except:
-        pass
+    except AttributeError:
+        bot.send_message(416859943, 'help')
 
 
 def trueRandom(a, lvl):
@@ -87,8 +109,8 @@ def report_message(message):
     try:
         bot.reply_to(message, '@mataner @andead422 @dimaborak @Gazelka @MatHtaM @melkii_pumba')
         bot.send_message(-1001418192939, 'Розбійник в @matan_help')
-    except:
-        pass
+    except AttributeError:
+        bot.send_message(416859943, 'report')
 
 
 @bot.message_handler(commands=['question'])
@@ -96,8 +118,8 @@ def question_message(message):
     try:
         bot.reply_to(message, '@mataner @andead422 @dimaborak @Gazelka @MatHtaM @melkii_pumba')
         bot.send_message(-1001418192939, 'Дебіл в @matan_help')
-    except:
-        pass
+    except AttributeError:
+        bot.send_message(416859943, 'question')
 
 
 
@@ -106,7 +128,7 @@ def question_message(message):
 # 	global tmpar
 # 	if time.time()-tmpar>600:
 # 		tmpar=time.time()
-# 		listQ = open("Data/Tasks/q.txt", 'r')
+# 		listQ = open("/home/test1bot/Data/Tasks/q.txt", 'r')
 # 		counter=0
 # 		quantity=0
 # 		for line in listQ:
@@ -114,7 +136,7 @@ def question_message(message):
 # 			if counter==5:
 # 				quantity=int(line)
 # 		a = random.randint(1, quantity)
-# 		pth = r"Data/Tasks/Questions/5/" + str(a) + ".png"
+# 		pth = r"/home/test1bot/Data/Tasks/Questions/5/" + str(a) + ".png"
 # 		file = open(pth, 'rb')
 # 		bot.send_photo(message.chat.id, file, caption="Розв'язання цих задач на параметри не впливає на інтелектуальний рейтинг. Тут ви можете знайти лише вибрані задачі підвищеної складності. Викликати іншу задачу можна лише через 10 хвилин після виклику даної задачі. Відповідь автоматично не перевіряється.")
 
@@ -137,7 +159,7 @@ def task_text(message):
                      'Вказані невірні аргументи. Аргументом може слугувати лише число від 1 до 4 включно, де число позначає складність завдання')
         return 0
     if not isSolving and (tester == 1 or tester == 2 or tester == 3 or tester == 4):
-        listQ = open("Data/Tasks/q.txt", 'r')
+        listQ = open("/home/test1bot/Data/Tasks/q.txt", 'r')
         quantity = 0
         counter = 0
         for line in listQ:
@@ -146,17 +168,17 @@ def task_text(message):
                 level = int(message.text[6])
                 quantity = int(line)
         a = trueRandom(quantity, level)
-        path = r"Data/Tasks/Questions/" + message.text[6] + "/" + str(a) + ".png"
+        path = r"/home/test1bot/Data/Tasks/Questions/" + message.text[6] + "/" + str(a) + ".png"
         file = open(path, 'rb')
         try:
             bot.send_photo(message.chat.id, file,
                       caption='Відповіддю є число в десятковому записі. Відповідь округлюється до трьох знаків після коми за правилами округлення.\nРівень складності: ' + str(
                           level) + '\nПриклад: 16; -38,8; 0; 44.268. \nТермін виконання - ' + str(
                           level * 10) + ' хвилин')
-        except:
-            pass
+        except AttributeError:
+            bot.send_message(416859943, 'task 1')
         isSolving = True
-        path2 = "Data/Tasks/Solutions/" + str(level) + "/sol.txt"
+        path2 = "/home/test1bot/Data/Tasks/Solutions/" + str(level) + "/sol.txt"
         counter = 0
         sol = open(path2, 'r')
         for line in sol:
@@ -171,14 +193,14 @@ def task_text(message):
         file = open(path, 'rb')
         try:
             bot.send_photo(message.chat.id, file, caption=r"Спочатку розв'яжіть запропоновану задачу!")
-        except:
-            pass
+        except AttributeError:
+            bot.send_message(416859943, 'task 2')
     else:
         try:
             bot.reply_to(message,
                      'Вказані невірні аргументи. Аргументом може слугувати лише число від 1 до 4 включно, де число позначає складність завдання')
-        except:
-            pass
+        except AttributeError:
+            bot.send_message(416859943, 'task error')
         return 0
 
 
@@ -201,7 +223,7 @@ def add_command(message):
     except:
         bot.reply_to(message, 'Невірні аргументи')
         return 0
-    f = open('Data/Tasks/q.txt', 'r')
+    f = open('/home/test1bot/Data/Tasks/q.txt', 'r')
     counter = 0
     for line in f:
         add_lvls_list[counter] = int(line)
@@ -244,8 +266,8 @@ def top_10(message):
         # print(msg)
         try:
             bot.reply_to(message, msg, parse_mode="HTML")
-        except:
-            pass
+        except AttributeError:
+            bot.send_message(416859943, 'top msg')
     elif sort == "intel":
         msg = str('Інтелектуальний рейтинг\n')
         cur.execute(
@@ -262,14 +284,14 @@ def top_10(message):
         # print(msg)
         try:
             bot.reply_to(message, msg, parse_mode="HTML")
-        except:
-            pass
+        except AttributeError:
+            bot.send_message(416859943, 'top intel')
     else:
         try:
             bot.reply_to(message,
                          'Вказані невірні аргументи. Аргументом може слугувати лише msg або intel')
-        except:
-            pass
+        except AttributeError:
+            bot.send_message(416859943, 'top error')
     conn.commit()
     cur.close()
 
@@ -283,7 +305,7 @@ def add_command(message):
         except:
             pass
         return 0
-    f = open('Data/Tasks/q.txt', 'r')
+    f = open('/home/test1bot/Data/Tasks/q.txt', 'r')
     counter = 0
     for line in f:
         add_lvls_list[counter] = int(line)
@@ -296,10 +318,20 @@ def add_command(message):
 @bot.message_handler(content_types=[""'video_note', 'voice', 'sticker', 'audio', 'document', 'photo', 'text',
                                     'video', 'location', 'contact', 'new_chat_members', 'left_chat_member'""])
 def sorting(message):
-    if message.chat.id != -1001382702607 and message.chat.id != -1001415917929 and message.chat.id != -1001418192939 and message.chat.id != -458266883:
-        print(message.chat.id)
-        bot.leave_chat(message.chat.id)
+    if message.chat.id != -1001382702607 and message.chat.id != -1001415917929 and message.chat.id != -1001418192939:
+        # -1001288947031 test group
+        # print(message.chat.id)
+        if message.chat.type == 'private':
+            bot.reply_to(message, 'Бот можна використовувати лише у группі @matan_help')
+        else:
+            try:
+                bot.leave_chat(message.chat.id)
+            except:
+                pass
     else:
+        # x = random.randint(1, 100)
+        # if x == 1:
+        #     bot.send_message(message.chat.id, 'пшшш, это разработчики сиего творения, хотим сказать, что у администратора @Gazelka сегодня день рождения')
         queue(message)
         if message.content_type == 'new_chat_members':
             hello_message(message)
@@ -347,8 +379,8 @@ def send_text(message):
                          '<b>Вітаємо!</b> <i>Ви першим розв\'язали задачу рівня ' + str(level) + ' за <b>' + str(
                              int(tm1) - int(tm)) + ' с</b>, і отримуєте</i> <b>+' + str(
                              pts()) + '</b> <i>до Вашого інтелектуального рейтингу</i>', parse_mode="HTML")
-            except:
-                pass
+            except AttributeError:
+                bot.send_message(416859943, 'right answer')
             isSolving = False
             intelligence(message, pts())
 
@@ -360,15 +392,15 @@ def handle_docs_photo(message):
         try:
             file_info = bot.get_file(message.photo[len(message.photo) - 1].file_id)
             downloaded_file = bot.download_file(file_info.file_path)
-            src = "Data/Tasks/Questions/" + str(add_level) + "/" + str(add_lvls_list[add_level - 1]) + ".png"
+            src = "/home/test1bot/Data/Tasks/Questions/" + str(add_level) + "/" + str(add_lvls_list[add_level - 1]) + ".png"
             with open(src, 'wb') as new_file:
                 new_file.write(downloaded_file)
                 bot.reply_to(message, "Ok!")
-            f = open("Data/Tasks/q.txt", 'w')
+            f = open("/home/test1bot/Data/Tasks/q.txt", 'w')
             for i in add_lvls_list:
                 f.write(str(i) + '\n')
             f.close()
-            f = open("Data/Tasks/Solutions/" + str(add_level) + "/sol.txt", 'a')
+            f = open("/home/test1bot/Data/Tasks/Solutions/" + str(add_level) + "/sol.txt", 'a')
             f.write('\n' + str(add_ans))
             isAdd = False
         except Exception as e:
@@ -377,11 +409,11 @@ def handle_docs_photo(message):
         try:
             file_info = bot.get_file(message.photo[len(message.photo) - 1].file_id)
             downloaded_file = bot.download_file(file_info.file_path)
-            src = "Data/Tasks/Questions/5/" + str(add_lvls_list[add_level - 1]) + ".png"
+            src = "/home/test1bot/Data/Tasks/Questions/5/" + str(add_lvls_list[add_level - 1]) + ".png"
             with open(src, 'wb') as new_file:
                 new_file.write(downloaded_file)
                 bot.reply_to(message, "Илона отлично сосёт!")
-            f = open("Data/Tasks/q.txt", 'w')
+            f = open("/home/test1bot/Data/Tasks/q.txt", 'w')
             for i in add_lvls_list:
                 f.write(str(i) + '\n')
             f.close()
@@ -391,7 +423,7 @@ def handle_docs_photo(message):
 
 
 def queue(message):
-    if message.chat.id == -1001415917929 and message.from_user.id != 777000:    #Matanove 
+    if message.chat.id == -1001415917929 and message.from_user.id != 777000:    #Matanove
     # if message.chat.id == -458266883 and message.from_user.id != 777000:    #testgroup
     # if message.chat.id == -1001418192939 and message.from_user.id != 777000:    #troll
         q.append(message)
