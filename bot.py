@@ -379,8 +379,8 @@ def send_text(message):
                          '<b>Вітаємо!</b> <i>Ви першим розв\'язали задачу рівня ' + str(level) + ' за <b>' + str(
                              int(tm1) - int(tm)) + ' с</b>, і отримуєте</i> <b>+' + str(
                              pts()) + '</b> <i>до Вашого інтелектуального рейтингу</i>', parse_mode="HTML")
-                except:
-                    pass
+            except:
+                pass
             isSolving = False
             intelligence(message, pts())
 
