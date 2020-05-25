@@ -19,7 +19,10 @@ isAdd = False
 add_level = 0
 add_ans = 0
 add_lvls_list = [0, 0, 0, 0, 0]
-antirepeat = [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]
+antirepeat = [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]
 PrevHelloMessageId = 101437  # рандомні цифри, номер повідомлення
 NewHelloMessageId = 101438  # message_id
 helloText = """Вітаю в @matan_help ✋
@@ -70,29 +73,6 @@ def rnd(x):
     return y
 
 
-def pts():
-    tm1 = int(time.time()) - int(tm)
-    return round(
-        pow(2, (level - 1) / 2.0) * pow(3, float(level) - float(tm1 / (120.0 * pow(10, float(level + 2) / 3.0)))))
-
-
-@bot.message_handler(commands=['start'])
-def start_message(message):
-    try:
-        bot.send_message(message.chat.id, 'Привіт! Я допомагаю в групі  @matan_help')
-    except:
-        pass
-
-
-# команди
-@bot.message_handler(commands=['help'])
-def help_message(message):
-    try:
-        bot.send_message(message.chat.id, helpText)
-    except:
-        pass
-
-
 def trueRandom(a, lvl):
     rndval = random.randint(1, a)
     for i in antirepeat[lvl - 1]:
@@ -104,7 +84,64 @@ def trueRandom(a, lvl):
     return rndval
 
 
-@bot.message_handler(commands=['report'])
+def pts():
+    tm1 = int(time.time()) - int(tm)
+    return round(
+        pow(2, (level - 1) / 2.0) * pow(3, float(level) - float(tm1 / (120.0 * pow(10, float(level + 2) / 3.0)))))
+
+
+@bot.message_handler(commands=[""'start', 'help', 'report', 'question', 'parameters',
+                               'task', 'add', 'stat', 'top', 'paradd'""])
+def command_sorting(message):
+    if message.chat.id != -1001382702607 and message.chat.id != -1001415917929 and message.chat.id != -1001418192939:
+        # -1001288947031 test group
+        # print(message.chat.id)
+        if message.chat.type == 'private':
+            bot.reply_to(message, 'Бот можна використовувати лише у группі @matan_help')
+        else:
+            try:
+                bot.leave_chat(message.chat.id)
+            except:
+                pass
+    else:
+        if str(message.text) == '/start':
+            start_message(message)
+        elif str(message.text) == '/help':
+            help_message(message)
+        elif str(message.text) == '/report':
+            report_message(message)
+        elif str(message.text) == '/question':
+            question_message(message)
+        elif str(message.text) == '/parameters':
+            parameters_text(message)
+        elif str(message.text) == '/task':
+            task_text(message)
+        elif str(message.text) == '/add':
+            add_task(message)
+        elif str(message.text) == '/stat':
+            url_send(message)
+        elif str(message.text) == '/top':
+            top_10(message)
+        elif str(message.text) == '/paradd':
+            add_param(message)
+        else:
+            pass
+
+
+def start_message(message):
+    try:
+        bot.send_message(message.chat.id, 'Привіт! Я допомагаю в групі  @matan_help')
+    except:
+        pass
+
+
+def help_message(message):
+    try:
+        bot.send_message(message.chat.id, helpText)
+    except:
+        pass
+
+
 def report_message(message):
     try:
         bot.reply_to(message, '@mataner @andead422 @dimaborak @Gazelka @MatHtaM @melkii_pumba')
@@ -113,7 +150,6 @@ def report_message(message):
         pass
 
 
-@bot.message_handler(commands=['question'])
 def question_message(message):
     try:
         bot.reply_to(message, '@mataner @andead422 @dimaborak @Gazelka @MatHtaM @melkii_pumba')
@@ -122,8 +158,6 @@ def question_message(message):
         pass
 
 
-
-# @bot.message_handler(commands=['parameters'])
 # def parameters_text(message):
 # 	global tmpar
 # 	if time.time()-tmpar>600:
@@ -141,7 +175,6 @@ def question_message(message):
 # 		bot.send_photo(message.chat.id, file, caption="Розв'язання цих задач на параметри не впливає на інтелектуальний рейтинг. Тут ви можете знайти лише вибрані задачі підвищеної складності. Викликати іншу задачу можна лише через 10 хвилин після виклику даної задачі. Відповідь автоматично не перевіряється.")
 
 
-@bot.message_handler(commands=['task'])
 def task_text(message):
     global isSolving
     global rightAnswer
@@ -172,9 +205,9 @@ def task_text(message):
         file = open(path, 'rb')
         try:
             bot.send_photo(message.chat.id, file,
-                      caption='Відповіддю є число в десятковому записі. Відповідь округлюється до трьох знаків після коми за правилами округлення.\nРівень складності: ' + str(
-                          level) + '\nПриклад: 16; -38,8; 0; 44.268. \nТермін виконання - ' + str(
-                          level * 10) + ' хвилин')
+                           caption='Відповіддю є число в десятковому записі. Відповідь округлюється до трьох знаків після коми за правилами округлення.\nРівень складності: ' + str(
+                               level) + '\nПриклад: 16; -38,8; 0; 44.268. \nТермін виконання - ' + str(
+                               level * 10) + ' хвилин')
         except:
             pass
         isSolving = True
@@ -198,13 +231,12 @@ def task_text(message):
     else:
         try:
             bot.reply_to(message,
-                     'Вказані невірні аргументи. Аргументом може слугувати лише число від 1 до 4 включно, де число позначає складність завдання')
+                         'Вказані невірні аргументи. Аргументом може слугувати лише число від 1 до 4 включно, де число позначає складність завдання')
         except:
             pass
         return 0
 
 
-@bot.message_handler(commands=['add'])
 def add_task(message):
     global add_level
     global add_ans
@@ -233,7 +265,6 @@ def add_task(message):
     bot.reply_to(message, 'Ожидаю фото...')
 
 
-# @bot.message_handler(commands=['stat'])
 # def url_send(message):
 #     url = ''
 #     try:
@@ -242,18 +273,18 @@ def add_task(message):
 #         pass
 
 
-@bot.message_handler(commands=['top'])
 def top_10(message):
     # print(msg)
     sort = message.text[5:]
     sort = sort.replace(" ", "")
     # print(sort)
-    conn = pymysql.connect(host="matanovezno.mysql.pythonanywhere-services.com", user="matanovezno", password="P@ssw0rd", database="matanovezno$Matanove")
+    conn = pymysql.connect(host="matanovezno.mysql.pythonanywhere-services.com", user="matanovezno",
+                           password="P@ssw0rd", database="matanovezno$Matanove")
     cur = conn.cursor()
     if sort == "msg":
         msg = str('Рейтинг за кілкістю повідомлень\n')
         cur.execute(
-        f"SELECT t1.name, t1.surname, t2.qty FROM identify=t1, stat=t2 WHERE t1.user_id = t2.user_id ORDER BY t2.qty DESC")
+            f"SELECT t1.name, t1.surname, t2.qty FROM identify=t1, stat=t2 WHERE t1.user_id = t2.user_id ORDER BY t2.qty DESC")
         top_name = cur.fetchmany(size=10)
         # print(top_name)
         counter = 1
@@ -271,7 +302,7 @@ def top_10(message):
     elif sort == "intel":
         msg = str('Інтелектуальний рейтинг\n')
         cur.execute(
-        f"SELECT t1.name, t1.surname, t2.intel FROM identify=t1, stat=t2 WHERE t1.user_id = t2.user_id ORDER BY t2.intel DESC")
+            f"SELECT t1.name, t1.surname, t2.intel FROM identify=t1, stat=t2 WHERE t1.user_id = t2.user_id ORDER BY t2.intel DESC")
         top_name = cur.fetchmany(size=10)
         # print(top_name)
         counter = 1
@@ -296,7 +327,6 @@ def top_10(message):
     cur.close()
 
 
-@bot.message_handler(commands=['paradd'])
 def add_param(message):
     global isPAdd
     if int(message.chat.id) != -1001382702607:
@@ -317,7 +347,7 @@ def add_param(message):
 
 @bot.message_handler(content_types=[""'video_note', 'voice', 'sticker', 'audio', 'document', 'photo', 'text',
                                     'video', 'location', 'contact', 'new_chat_members', 'left_chat_member'""])
-def sorting(message):
+def message_sorting(message):
     if message.chat.id != -1001382702607 and message.chat.id != -1001415917929 and message.chat.id != -1001418192939:
         # -1001288947031 test group
         # print(message.chat.id)
@@ -376,9 +406,9 @@ def send_text(message):
         if isSolving and float(rnd(float(txt))) == float(rnd(float(rightAnswer))):
             try:
                 bot.reply_to(message,
-                         '<b>Вітаємо!</b> <i>Ви першим розв\'язали задачу рівня ' + str(level) + ' за <b>' + str(
-                             int(tm1) - int(tm)) + ' с</b>, і отримуєте</i> <b>+' + str(
-                             pts()) + '</b> <i>до Вашого інтелектуального рейтингу</i>', parse_mode="HTML")
+                             '<b>Вітаємо!</b> <i>Ви першим розв\'язали задачу рівня ' + str(level) + ' за <b>' + str(
+                                 int(tm1) - int(tm)) + ' с</b>, і отримуєте</i> <b>+' + str(
+                                 pts()) + '</b> <i>до Вашого інтелектуального рейтингу</i>', parse_mode="HTML")
             except:
                 pass
             isSolving = False
@@ -392,7 +422,8 @@ def handle_docs_photo(message):
         try:
             file_info = bot.get_file(message.photo[len(message.photo) - 1].file_id)
             downloaded_file = bot.download_file(file_info.file_path)
-            src = "/home/test1bot/Data/Tasks/Questions/" + str(add_level) + "/" + str(add_lvls_list[add_level - 1]) + ".png"
+            src = "/home/test1bot/Data/Tasks/Questions/" + str(add_level) + "/" + str(
+                add_lvls_list[add_level - 1]) + ".png"
             with open(src, 'wb') as new_file:
                 new_file.write(downloaded_file)
                 bot.reply_to(message, "Ok!")
@@ -423,13 +454,14 @@ def handle_docs_photo(message):
 
 
 def queue(message):
-    if message.chat.id == -1001415917929 and message.from_user.id != 777000:    #Matanove
-    # if message.chat.id == -458266883 and message.from_user.id != 777000:    #testgroup
-    # if message.chat.id == -1001418192939 and message.from_user.id != 777000:    #troll
+    if message.chat.id == -1001415917929 and message.from_user.id != 777000:  # Matanove
+        # if message.chat.id == -458266883 and message.from_user.id != 777000:    #testgroup
+        # if message.chat.id == -1001418192939 and message.from_user.id != 777000:    #troll
         q.append(message)
         while len(q) > 0:
             mssg = q.popleft()
-            conn = pymysql.connect(host="matanovezno.mysql.pythonanywhere-services.com", user="matanovezno", password="P@ssw0rd", database="matanovezno$Matanove")
+            conn = pymysql.connect(host="matanovezno.mysql.pythonanywhere-services.com", user="matanovezno",
+                                   password="P@ssw0rd", database="matanovezno$Matanove")
             cur = conn.cursor()
             name = (str(mssg.from_user.first_name), "")[str(mssg.from_user.first_name) == "None"]
             surname = (str(mssg.from_user.last_name), "")[str(mssg.from_user.last_name) == "None"]
@@ -463,12 +495,13 @@ def queue(message):
 
 
 def intelligence(message, intel):
-    if message.chat.id == -1001415917929 and message.from_user.id != 777000:    # Matanove
-    # if message.chat.id == -458266883 and message.from_user.id != 777000:    #testgroup
-    # if message.chat.id == -1001418192939 and message.from_user.id != 777000:    #troll
+    if message.chat.id == -1001415917929 and message.from_user.id != 777000:  # Matanove
+        # if message.chat.id == -458266883 and message.from_user.id != 777000:    #testgroup
+        # if message.chat.id == -1001418192939 and message.from_user.id != 777000:    #troll
         try:
             # print(intel)
-            conn = pymysql.connect(host="matanovezno.mysql.pythonanywhere-services.com", user="matanovezno", password="P@ssw0rd", database="matanovezno$Matanove")
+            conn = pymysql.connect(host="matanovezno.mysql.pythonanywhere-services.com", user="matanovezno",
+                                   password="P@ssw0rd", database="matanovezno$Matanove")
             cur = conn.cursor()
             user_id = message.from_user.id
             query = "UPDATE `stat` SET `intel` = `intel` + {} WHERE `user_id` = '{}'".format(intel, user_id)
