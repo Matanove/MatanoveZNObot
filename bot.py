@@ -205,7 +205,7 @@ def task_text(message):
 
 
 @bot.message_handler(commands=['add'])
-def add_command(message):
+def add_task(message):
     global add_level
     global add_ans
     global isAdd
@@ -297,7 +297,7 @@ def top_10(message):
 
 
 @bot.message_handler(commands=['paradd'])
-def add_command(message):
+def add_param(message):
     global isPAdd
     if int(message.chat.id) != -1001382702607:
         try:
