@@ -112,17 +112,17 @@ def command_sorting(message):
             report_message(message)
         elif str(message.text) == '/question':
             question_message(message)
-        elif str(message.text) == '/parameters':
-            parameters_text(message)
-        elif str(message.text) == '/task':
+        # elif str(message.text) == '/parameters':
+        #     parameters_text(message)
+        elif str(message.text)[:5] == '/task':
             task_text(message)
-        elif str(message.text) == '/add':
+        elif str(message.text)[:4] == '/add':
             add_task(message)
-        elif str(message.text) == '/stat':
-            url_send(message)
-        elif str(message.text) == '/top':
+        # elif str(message.text) == '/stat':
+        #     url_send(message)
+        elif str(message.text)[:4] == '/top':
             top_10(message)
-        elif str(message.text) == '/paradd':
+        elif str(message.text)[:7] == '/paradd':
             add_param(message)
         else:
             pass
