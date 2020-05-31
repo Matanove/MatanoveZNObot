@@ -23,25 +23,25 @@ def command_sorting(message):
                 pass
     else:
         if str(message.text) == '/start':
-            start_message(message)
+            bot_code.start_message(bot, message)
         elif str(message.text) == '/help':
-            help_message(message)
+            bot_code.help_message(bot, message)
         elif str(message.text) == '/report':
-            report_message(message)
+            bot_code.report_message(bot, message)
         elif str(message.text) == '/question':
-            question_message(message)
+            bot_code.question_message(bot, message)
         # elif str(message.text) == '/parameters':
-        #     parameters_text(message)
+        #     bot_code.parameters_text(bot, message)
         elif str(message.text)[:5] == '/task':
-            task_text(message)
+            bot_code.task_text(bot, message)
         elif str(message.text)[:4] == '/add':
-            add_task(message)
+            bot_code.add_task(bot, message)
         # elif str(message.text) == '/stat':
-        #     url_send(message)
+        #     bot_code.url_send(bot, message)
         elif str(message.text)[:4] == '/top':
-            top_10(message)
+            bot_code.top_10(bot, message)
         elif str(message.text)[:7] == '/paradd':
-            add_param(message)
+            bot_code.add_param(bot, message)
         else:
             pass        
         
@@ -62,11 +62,11 @@ def message_sorting(message):
     else:
         queue(message)
         if message.content_type == 'new_chat_members':
-            hello_message(message)
+            bot_code.hello_message(bot, message)
         elif message.content_type == 'text':
-            send_text(message)
+            bot_code.send_text(bot, message)
         elif message.content_type == 'photo':
-            handle_docs_photo(message)
+            bot_code.handle_docs_photo(bot, message)
         else:
             pass
             
