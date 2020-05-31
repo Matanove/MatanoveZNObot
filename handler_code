@@ -1,0 +1,73 @@
+import telebot
+import bot_code
+import setup
+
+
+bot = telebot.TeleBot(setup.bot_token())
+bot.remove_webhook()
+bot.set_webhook(url=setup.bot_secret())
+
+@bot.message_handler(commands=[""'start', 'help', 'report', 'question', 'parameters',
+                              'task', 'add', 'stat', 'top', 'paradd'""])
+def command_sorting(message):
+    print('1')
+    if message.chat.id != -1001382702607 and message.chat.id != -1001415917929 and message.chat.id != -1001418192939:
+        # -1001288947031 test group
+        # print(message.chat.id)
+        if message.chat.type == 'private':
+            bot.reply_to(message, 'Бот можна використовувати лише у группі @matan_help')
+        else:
+            try:
+                bot.leave_chat(message.chat.id)
+            except:
+                pass
+    else:
+        if str(message.text) == '/start':
+            start_message(message)
+        elif str(message.text) == '/help':
+            help_message(message)
+        elif str(message.text) == '/report':
+            report_message(message)
+        elif str(message.text) == '/question':
+            question_message(message)
+        # elif str(message.text) == '/parameters':
+        #     parameters_text(message)
+        elif str(message.text)[:5] == '/task':
+            task_text(message)
+        elif str(message.text)[:4] == '/add':
+            add_task(message)
+        # elif str(message.text) == '/stat':
+        #     url_send(message)
+        elif str(message.text)[:4] == '/top':
+            top_10(message)
+        elif str(message.text)[:7] == '/paradd':
+            add_param(message)
+        else:
+            pass        
+        
+        
+@bot.message_handler(content_types=[""'video_note', 'voice', 'sticker', 'audio', 'document', 'photo', 'text',
+                                    'video', 'location', 'contact', 'new_chat_members', 'left_chat_member'""])
+def message_sorting(message):
+    if message.chat.id != -1001382702607 and message.chat.id != -1001415917929 and message.chat.id != -1001418192939:
+        # -1001288947031 test group
+        # print(message.chat.id)
+        if message.chat.type == 'private':
+            bot.reply_to(message, 'Бот можна використовувати лише у группі @matan_help')
+        else:
+            try:
+                bot.leave_chat(message.chat.id)
+            except:
+                pass
+    else:
+        queue(message)
+        if message.content_type == 'new_chat_members':
+            hello_message(message)
+        elif message.content_type == 'text':
+            send_text(message)
+        elif message.content_type == 'photo':
+            handle_docs_photo(message)
+        else:
+            pass
+            
+bot.infinity_pooling()
