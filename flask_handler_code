@@ -77,4 +77,4 @@ def message_sorting(message):
         else:
             pass
             
-bot.infinity_pooling()
+bot.polling()
