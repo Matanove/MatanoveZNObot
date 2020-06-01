@@ -73,22 +73,21 @@ def pts():
         pow(2, (level - 1) / 2.0) * pow(3, float(level) - float(tm1 / (120.0 * pow(10, float(level + 2) / 3.0)))))
 
 
-@bot.message_handler(func=lambda message: True)
-def start_message(message):
+def start_message(bot, message):
     try:
         bot.send_message(message.chat.id, 'Привіт! Я допомагаю в групі  @matan_help')
     except:
         pass
 
 
-def help_message(message):
+def help_message(bot, message):
     try:
         bot.send_message(message.chat.id, helpText)
     except:
         pass
 
 
-def report_message(message):
+def report_message(bot, message):
     try:
         bot.reply_to(message, '@mataner @andead422 @dimaborak @Gazelka @MatHtaM @melkii_pumba')
         bot.send_message(-1001418192939, 'Розбійник в @matan_help')
@@ -96,7 +95,7 @@ def report_message(message):
         pass
 
 
-def question_message(message):
+def question_message(bot, message):
     try:
         bot.reply_to(message, '@mataner @andead422 @dimaborak @Gazelka @MatHtaM @melkii_pumba')
         bot.send_message(-1001418192939, 'Дебіл в @matan_help')
@@ -104,7 +103,7 @@ def question_message(message):
         pass
 
 
-# def parameters_text(message):
+# def parameters_text(bot, message):
 # 	global tmpar
 # 	if time.time()-tmpar>600:
 # 		tmpar=time.time()
@@ -121,7 +120,7 @@ def question_message(message):
 # 		bot.send_photo(message.chat.id, file, caption="Розв'язання цих задач на параметри не впливає на інтелектуальний рейтинг. Тут ви можете знайти лише вибрані задачі підвищеної складності. Викликати іншу задачу можна лише через 10 хвилин після виклику даної задачі. Відповідь автоматично не перевіряється.")
 
 
-def task_text(message):
+def task_text(bot, message):
     global isSolving
     global rightAnswer
     global path
@@ -183,7 +182,7 @@ def task_text(message):
         return 0
 
 
-def add_task(message):
+def add_task(bot, message):
     global add_level
     global add_ans
     global isAdd
@@ -211,7 +210,7 @@ def add_task(message):
     bot.reply_to(message, 'Ожидаю фото...')
 
 
-# def url_send(message):
+# def url_send(bot, message):
 #     url = ''
 #     try:
 #         bot.reply_to(message, url)
@@ -219,7 +218,7 @@ def add_task(message):
 #         pass
 
 
-def top_10(message):
+def top_10(bot, message):
     # print(msg)
     sort = message.text[5:]
     sort = sort.replace(" ", "")
@@ -271,7 +270,7 @@ def top_10(message):
     cur.close()
 
 
-def add_param(message):
+def add_param(bot, message):
     global isPAdd
     if int(message.chat.id) != -1001382702607:
         try:
@@ -290,7 +289,7 @@ def add_param(message):
 
 
 # Новий учасник групи зайшов в чат
-def hello_message(message):
+def hello_message(bot, message):
     try:
         bot.reply_to(message, helloText)
     except:
@@ -305,7 +304,7 @@ def hello_message(message):
         pass
 
 
-def send_text(message):
+def send_text(bot, message):
     global isSolving
     tm1 = time.time()
     txt = message.text
@@ -331,7 +330,7 @@ def send_text(message):
             intelligence(message, pts())
 
 
-def handle_docs_photo(message):
+def handle_docs_photo(bot, message):
     global isAdd
     global isPAdd
     if isAdd and message.chat.id == -1001382702607:
@@ -369,7 +368,7 @@ def handle_docs_photo(message):
             bot.reply_to(message, e)
 
 
-def queue(message):
+def queue(bot, message):
     if message.chat.id == -1001415917929 and message.from_user.id != 777000:  # Matanove
         # if message.chat.id == -458266883 and message.from_user.id != 777000:    #testgroup
         # if message.chat.id == -1001418192939 and message.from_user.id != 777000:    #troll
@@ -410,7 +409,7 @@ def queue(message):
         pass
 
 
-def intelligence(message, intel):
+def intelligence(bot, message, intel):
     if message.chat.id == -1001415917929 and message.from_user.id != 777000:  # Matanove
         # if message.chat.id == -458266883 and message.from_user.id != 777000:    #testgroup
         # if message.chat.id == -1001418192939 and message.from_user.id != 777000:    #troll
