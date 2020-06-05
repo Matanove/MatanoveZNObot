@@ -7,11 +7,6 @@ from collections import deque
 import math
 import setup
 
-s = setup.bot_secret()
-u = 'https://matanovezno.pythonanywhere.com/{}'.format(s)
-bot = telebot.TeleBot(setup.bot_token())
-
-
 q = deque()
 path = ""
 isSolving = False
