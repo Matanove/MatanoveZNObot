@@ -107,7 +107,7 @@ def question_message(bot, message):
 # 	global tmpar
 # 	if time.time()-tmpar>600:
 # 		tmpar=time.time()
-# 		listQ = open("/home/test1bot/Data/Tasks/q.txt", 'r')
+# 		listQ = open("/home/matanovezno/Data/Tasks/q.txt", 'r')
 # 		counter=0
 # 		quantity=0
 # 		for line in listQ:
@@ -115,7 +115,7 @@ def question_message(bot, message):
 # 			if counter==5:
 # 				quantity=int(line)
 # 		a = random.randint(1, quantity)
-# 		pth = r"/home/test1bot/Data/Tasks/Questions/5/" + str(a) + ".png"
+# 		pth = r"/home/matanovezno/Data/Tasks/Questions/5/" + str(a) + ".png"
 # 		file = open(pth, 'rb')
 # 		bot.send_photo(message.chat.id, file, caption="Розв'язання цих задач на параметри не впливає на інтелектуальний рейтинг. Тут ви можете знайти лише вибрані задачі підвищеної складності. Викликати іншу задачу можна лише через 10 хвилин після виклику даної задачі. Відповідь автоматично не перевіряється.")
 
@@ -137,7 +137,7 @@ def task_text(bot, message):
                      'Вказані невірні аргументи. Аргументом може слугувати лише число від 1 до 4 включно, де число позначає складність завдання')
         return 0
     if not isSolving and (tester == 1 or tester == 2 or tester == 3 or tester == 4):
-        listQ = open("/home/test1bot/Data/Tasks/q.txt", 'r')
+        listQ = open("/home/matanovezno/Data/Tasks/q.txt", 'r')
         quantity = 0
         counter = 0
         for line in listQ:
@@ -146,7 +146,7 @@ def task_text(bot, message):
                 level = int(message.text[6])
                 quantity = int(line)
         a = trueRandom(quantity, level)
-        path = r"/home/test1bot/Data/Tasks/Questions/" + message.text[6] + "/" + str(a) + ".png"
+        path = r"/home/matanovezno/Data/Tasks/Questions/" + message.text[6] + "/" + str(a) + ".png"
         file = open(path, 'rb')
         try:
             bot.send_photo(message.chat.id, file,
@@ -156,7 +156,7 @@ def task_text(bot, message):
         except:
             pass
         isSolving = True
-        path2 = "/home/test1bot/Data/Tasks/Solutions/" + str(level) + "/sol.txt"
+        path2 = "/home/matanovezno/Data/Tasks/Solutions/" + str(level) + "/sol.txt"
         counter = 0
         sol = open(path2, 'r')
         for line in sol:
@@ -200,7 +200,7 @@ def add_task(bot, message):
     except:
         bot.reply_to(message, 'Невірні аргументи')
         return 0
-    f = open('/home/test1bot/Data/Tasks/q.txt', 'r')
+    f = open('/home/matanovezno/Data/Tasks/q.txt', 'r')
     counter = 0
     for line in f:
         add_lvls_list[counter] = int(line)
@@ -278,7 +278,7 @@ def add_param(bot, message):
         except:
             pass
         return 0
-    f = open('/home/test1bot/Data/Tasks/q.txt', 'r')
+    f = open('/home/matanovezno/Data/Tasks/q.txt', 'r')
     counter = 0
     for line in f:
         add_lvls_list[counter] = int(line)
@@ -337,16 +337,16 @@ def handle_docs_photo(bot, message):
         try:
             file_info = bot.get_file(message.photo[len(message.photo) - 1].file_id)
             downloaded_file = bot.download_file(file_info.file_path)
-            src = "/home/test1bot/Data/Tasks/Questions/" + str(add_level) + "/" + str(
+            src = "/home/matanovezno/Data/Tasks/Questions/" + str(add_level) + "/" + str(
                 add_lvls_list[add_level - 1]) + ".png"
             with open(src, 'wb') as new_file:
                 new_file.write(downloaded_file)
                 bot.reply_to(message, "Ok!")
-            f = open("/home/test1bot/Data/Tasks/q.txt", 'w')
+            f = open("/home/matanovezno/Data/Tasks/q.txt", 'w')
             for i in add_lvls_list:
                 f.write(str(i) + '\n')
             f.close()
-            f = open("/home/test1bot/Data/Tasks/Solutions/" + str(add_level) + "/sol.txt", 'a')
+            f = open("/home/matanovezno/Data/Tasks/Solutions/" + str(add_level) + "/sol.txt", 'a')
             f.write('\n' + str(add_ans))
             isAdd = False
         except Exception as e:
@@ -355,11 +355,11 @@ def handle_docs_photo(bot, message):
         try:
             file_info = bot.get_file(message.photo[len(message.photo) - 1].file_id)
             downloaded_file = bot.download_file(file_info.file_path)
-            src = "/home/test1bot/Data/Tasks/Questions/5/" + str(add_lvls_list[add_level - 1]) + ".png"
+            src = "/home/matanovezno/Data/Tasks/Questions/5/" + str(add_lvls_list[add_level - 1]) + ".png"
             with open(src, 'wb') as new_file:
                 new_file.write(downloaded_file)
                 bot.reply_to(message, "Илона отлично сосёт!")
-            f = open("/home/test1bot/Data/Tasks/q.txt", 'w')
+            f = open("/home/matanovezno/Data/Tasks/q.txt", 'w')
             for i in add_lvls_list:
                 f.write(str(i) + '\n')
             f.close()
@@ -429,3 +429,4 @@ def intelligence(bot, message, intel):
     else:
         pass
         
+
