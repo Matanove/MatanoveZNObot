@@ -3,11 +3,19 @@ from flask import Flask, request
 import setup
 import bot_code
 
-bot = telebot.TeleBot(setup.bot_token())
+secret = setup.bot_secret()
+url = 'https://matanovezno.pythonanywhere.com/' + secret
+bot = telebot.TeleBot(setup.bot_token(), threaded=False)
 bot.remove_webhook()
-bot.set_webhook(url=setup.bot_secret())
+bot.set_webhook(url=url)
 
 app = Flask(__name__)
+
+@app.route('/')
+def site():
+    return 'Welcome!'
+
+
 @app.route('/'+secret, methods=['POST'])
 def webhook():
     update=telebot.types.Update.de_json(request.stream.read().decode('utf-8'))
@@ -50,9 +58,9 @@ def command_sorting(message):
         elif str(message.text)[:7] == '/paradd':
             bot_code.add_param(bot, message)
         else:
-            pass        
-        
-        
+            pass
+
+
 @bot.message_handler(content_types=[""'video_note', 'voice', 'sticker', 'audio', 'document', 'photo', 'text',
                                     'video', 'location', 'contact', 'new_chat_members', 'left_chat_member'""])
 def message_sorting(message):
@@ -67,7 +75,7 @@ def message_sorting(message):
             except:
                 pass
     else:
-        queue(message)
+        bot_code.queue(bot, message)
         if message.content_type == 'new_chat_members':
             bot_code.hello_message(bot, message)
         elif message.content_type == 'text':
@@ -76,5 +84,3 @@ def message_sorting(message):
             bot_code.handle_docs_photo(bot, message)
         else:
             pass
-            
-bot.polling()
