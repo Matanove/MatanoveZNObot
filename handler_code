@@ -5,7 +5,6 @@ import setup
 
 bot = telebot.TeleBot(setup.bot_token())
 bot.remove_webhook()
-bot.set_webhook(url=setup.bot_secret())
 
 @bot.message_handler(commands=[""'start', 'help', 'report', 'question', 'parameters',
                               'task', 'add', 'stat', 'top', 'paradd'""])
