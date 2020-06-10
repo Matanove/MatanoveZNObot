@@ -23,12 +23,11 @@ def webhook():
     return 'ok', 200
 
 @bot.message_handler(commands=[""'start', 'help', 'report', 'question', 'parameters',
-                              'task', 'add', 'stat', 'top', 'paradd'""])
+                              'task', 'add', 'stat', 'top', 'paradd', 'ban'""])
 def command_sorting(message):
-    print('1')
+    print(message)
     if message.chat.id != -1001382702607 and message.chat.id != -1001415917929 and message.chat.id != -1001418192939:
         # -1001288947031 test group
-        # print(message.chat.id)
         if message.chat.type == 'private':
             bot.reply_to(message, 'Бот можна використовувати лише у группі @matan_help')
         else:
@@ -39,7 +38,7 @@ def command_sorting(message):
     else:
         if str(message.text) == '/start':
             bot_code.start_message(bot, message)
-        elif str(message.text) == '/help':
+        elif str(message.text)[:5] == '/help':
             bot_code.help_message(bot, message)
         elif str(message.text) == '/report':
             bot_code.report_message(bot, message)
@@ -57,6 +56,12 @@ def command_sorting(message):
             bot_code.top_10(bot, message)
         elif str(message.text)[:7] == '/paradd':
             bot_code.add_param(bot, message)
+        elif str(message.text)[:4] == '/ban':
+            msg = message.from_user.id
+            if msg == 416859943 or msg == 560939857 or msg == 515912635 or msg == 618831393 or msg == 406855987:
+                bot_code.ban_command(bot, message)
+            else:
+                bot_code.ban_list(bot, message)
         else:
             pass
 
@@ -64,9 +69,9 @@ def command_sorting(message):
 @bot.message_handler(content_types=[""'video_note', 'voice', 'sticker', 'audio', 'document', 'photo', 'text',
                                     'video', 'location', 'contact', 'new_chat_members', 'left_chat_member'""])
 def message_sorting(message):
+    print(message)
     if message.chat.id != -1001382702607 and message.chat.id != -1001415917929 and message.chat.id != -1001418192939:
         # -1001288947031 test group
-        # print(message.chat.id)
         if message.chat.type == 'private':
             bot.reply_to(message, 'Бот можна використовувати лише у группі @matan_help')
         else:
