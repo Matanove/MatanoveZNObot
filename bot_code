@@ -5,7 +5,7 @@ import time
 import pymysql
 from collections import deque
 import math
-import setup
+
 
 q = deque()
 path = ""
@@ -36,7 +36,8 @@ helloText = """Вітаю в @matan_help ✋
 helpText = """ /report - повідомити про порушення
 /question - якщо виникло питання
 /task [складність]- розв'язуй задачі, стань першим в рейтингу(складність варіюється від 1 до 4, де 1-найлегший рівень)
-/top [msg або intel]- топ 10 учасників чату(msg-сортування за кілкістю повідомлень, intel-за інтелектуальним рейтингом)"""
+/top [msg або intel]- топ 10 учасників чату(msg-сортування за кілкістю повідомлень, intel-за інтелектуальним рейтингом)
+/ban- перевір, чи можеш ти вирішувати наші завдання"""
 
 
 def rnd(x):
@@ -123,6 +124,9 @@ def task_text(bot, message):
     global tm
     tester = 0
     tm1 = time.time()
+    conn = pymysql.connect(host="matanovezno.mysql.pythonanywhere-services.com", user="matanovezno",
+                          password="P@ssw0rd", database="matanovezno$Matanove")
+    cur = conn.cursor()
     if int(tm1) - int(tm) > 600 * level:
         isSolving = False
     try:
@@ -131,37 +135,45 @@ def task_text(bot, message):
         bot.reply_to(message,
                      'Вказані невірні аргументи. Аргументом може слугувати лише число від 1 до 4 включно, де число позначає складність завдання')
         return 0
+    cur.execute("SELECT user_id FROM stat WHERE isbanned = 1")
+    users_ban_id = cur.fetchall()
+    banned = []
+    for user_ban_id in users_ban_id:
+        banned.append(user_ban_id[0])
     if not isSolving and (tester == 1 or tester == 2 or tester == 3 or tester == 4):
-        listQ = open("/home/matanovezno/Data/Tasks/q.txt", 'r')
-        quantity = 0
-        counter = 0
-        for line in listQ:
-            counter += 1
-            if counter == int(message.text[6]):
-                level = int(message.text[6])
-                quantity = int(line)
-        a = trueRandom(quantity, level)
-        path = r"/home/matanovezno/Data/Tasks/Questions/" + message.text[6] + "/" + str(a) + ".png"
-        file = open(path, 'rb')
-        try:
-            bot.send_photo(message.chat.id, file,
-                          caption='Відповіддю є число в десятковому записі. Відповідь округлюється до трьох знаків після коми за правилами округлення.\nРівень складності: ' + str(
-                              level) + '\nПриклад: 16; -38,8; 0; 44.268. \nТермін виконання - ' + str(
-                              level * 10) + ' хвилин')
-        except:
-            pass
-        isSolving = True
-        path2 = "/home/matanovezno/Data/Tasks/Solutions/" + str(level) + "/sol.txt"
-        counter = 0
-        sol = open(path2, 'r')
-        for line in sol:
-            counter += 1
-            if counter == a:
-                rightAnswer = line
-        file.close()
-        sol.close()
-        listQ.close()
-        tm = time.time()
+        if message.from_user.id not in banned:
+            listQ = open("/home/matanovezno/Data/Tasks/q.txt", 'r')
+            quantity = 0
+            counter = 0
+            for line in listQ:
+                counter += 1
+                if counter == int(message.text[6]):
+                    level = int(message.text[6])
+                    quantity = int(line)
+            a = trueRandom(quantity, level)
+            path = r"/home/matanovezno/Data/Tasks/Questions/" + message.text[6] + "/" + str(a) + ".png"
+            file = open(path, 'rb')
+            try:
+                bot.send_photo(message.chat.id, file,
+                              caption='Відповіддю є число в десятковому записі. Відповідь округлюється до трьох знаків після коми за правилами округлення.\nРівень складності: ' + str(
+                                  level) + '\nПриклад: 16; -38,8; 0; 44.268. \nТермін виконання - ' + str(
+                                  level * 10) + ' хвилин')
+            except:
+                pass
+            isSolving = True
+            path2 = "/home/matanovezno/Data/Tasks/Solutions/" + str(level) + "/sol.txt"
+            counter = 0
+            sol = open(path2, 'r')
+            for line in sol:
+                counter += 1
+                if counter == a:
+                    rightAnswer = line
+            file.close()
+            sol.close()
+            listQ.close()
+            tm = time.time()
+        else:
+            bot.reply_to(message, 'Ви не можете вирішувати завдання')
     elif isSolving:
         file = open(path, 'rb')
         try:
@@ -175,6 +187,8 @@ def task_text(bot, message):
         except:
             pass
         return 0
+    conn.commit()
+    cur.close()
 
 
 def add_task(bot, message):
@@ -264,6 +278,53 @@ def top_10(bot, message):
     conn.commit()
     cur.close()
 
+def ban_command(bot, message):
+    sort = message.text[5:]
+    sort = sort.replace(" ", "")
+    conn = pymysql.connect(host="matanovezno.mysql.pythonanywhere-services.com", user="matanovezno",
+                          password="P@ssw0rd", database="matanovezno$Matanove")
+    cur = conn.cursor()
+    if sort == 'add' and message.reply_to_message != 'None':
+        try:
+            user_ban_id = message.reply_to_message.from_user.id
+            cur.execute(f"UPDATE stat SET isbanned = 1 WHERE user_id = '{user_ban_id}'")
+            msg = ''
+            msg += str(message.reply_to_message.from_user.first_name) + ' '
+            msg += (str(message.reply_to_message.from_user.last_name) + ' ', '')[str(message.reply_to_message.from_user.last_name) == 'None']
+            msg += 'тепер не може вирішувати задачі'
+            bot.reply_to(message, msg)
+        except:
+            pass
+    if sort == 'rm' and message.reply_to_message != 'None':
+        try:
+            user_ban_id = message.reply_to_message.from_user.id
+            cur.execute(f"UPDATE stat SET isbanned = 0 WHERE user_id = '{user_ban_id}'")
+            msg = ''
+            msg += str(message.reply_to_message.from_user.first_name) + ' '
+            msg += (str(message.reply_to_message.from_user.last_name) + ' ', '')[str(message.reply_to_message.from_user.last_name) == 'None']
+            msg += 'тепер може вирішувати задачі'
+            bot.reply_to(message, msg)
+        except:
+            pass
+    else:
+        pass
+    conn.commit()
+    cur.close()
+
+
+def ban_list(bot, message):
+    conn = pymysql.connect(host="matanovezno.mysql.pythonanywhere-services.com", user="matanovezno",
+                          password="P@ssw0rd", database="matanovezno$Matanove")
+    cur = conn.cursor()
+    cur.execute("SELECT user_id FROM stat WHERE isbanned = 1")
+    users_ban_id = cur.fetchall()
+    banned = []
+    for user_ban_id in users_ban_id:
+        banned.append(user_ban_id[0])
+    if message.from_user.id in banned:
+        bot.reply_to(message, 'Ви не можете вирішувати задачі')
+    else:
+        bot.reply_to(message, 'Ви можете вирішувати задачі')
 
 def add_param(bot, message):
     global isPAdd
@@ -303,7 +364,14 @@ def send_text(bot, message):
     global isSolving
     tm1 = time.time()
     txt = message.text
-    temp = 0.0
+    conn = pymysql.connect(host="matanovezno.mysql.pythonanywhere-services.com", user="matanovezno",
+                          password="P@ssw0rd", database="matanovezno$Matanove")
+    cur = conn.cursor()
+    cur.execute("SELECT user_id FROM stat WHERE isbanned = 1")
+    users_ban_id = cur.fetchall()
+    banned = []
+    for user_ban_id in users_ban_id:
+        banned.append(user_ban_id[0])
     txt = txt.replace(',', '.')
     if int(tm1) - int(tm) > 600 * level:
         isSolving = False
@@ -313,7 +381,7 @@ def send_text(bot, message):
     except ValueError:
         isVal = False
     if isVal:
-        if isSolving and float(rnd(float(txt))) == float(rnd(float(rightAnswer))):
+        if isSolving and float(rnd(float(txt))) == float(rnd(float(rightAnswer))) and message.from_user.id not in banned:
             try:
                 bot.reply_to(message,
                              '<b>Вітаємо!</b> <i>Ви першим розв\'язали задачу рівня ' + str(level) + ' за <b>' + str(
@@ -322,7 +390,9 @@ def send_text(bot, message):
             except:
                 pass
             isSolving = False
-            intelligence(message, pts())
+            intelligence(bot, message, pts())
+    conn.commit()
+    cur.close()
 
 
 def handle_docs_photo(bot, message):
@@ -365,8 +435,8 @@ def handle_docs_photo(bot, message):
 
 def queue(bot, message):
     if message.chat.id == -1001415917929 and message.from_user.id != 777000:  # Matanove
-        # if message.chat.id == -458266883 and message.from_user.id != 777000:    #testgroup
-        # if message.chat.id == -1001418192939 and message.from_user.id != 777000:    #troll
+    # if message.chat.id == -458266883 and message.from_user.id != 777000:    #testgroup
+    # if message.chat.id == -1001418192939 and message.from_user.id != 777000:    #troll
         q.append(message)
         while len(q) > 0:
             mssg = q.popleft()
@@ -374,30 +444,34 @@ def queue(bot, message):
                                   password="P@ssw0rd", database="matanovezno$Matanove")
             cur = conn.cursor()
             name = (str(mssg.from_user.first_name), "")[str(mssg.from_user.first_name) == "None"]
+            name_in_sql = conn.escape_string(name)
+            print(name_in_sql)
             surname = (str(mssg.from_user.last_name), "")[str(mssg.from_user.last_name) == "None"]
+            surname_in_sql = conn.escape_string(surname)
+            print(surname_in_sql)
             user_id = mssg.from_user.id
-            cur.execute("SELECT user_id FROM identify WHERE user_id = '{user_id}'")
+            cur.execute(f"SELECT user_id FROM identify WHERE user_id = '{user_id}'")
             user_id_list = cur.fetchall()
             if len(user_id_list) == 1:
                 # print(name + "1")
-                cur.execute("UPDATE stat SET qty = qty + 1 WHERE user_id = '{user_id}'")
+                cur.execute(f"UPDATE stat SET qty = qty + 1 WHERE user_id = '{user_id}'")
             elif len(user_id_list) == 0:
                 # print(name + "2")
-                cur.execute("INSERT INTO identify VALUES ('{name}', '{surname}', '{user_id}')")
-                cur.execute("INSERT INTO stat (qty, user_id) VALUES (1, '{user_id}')")
+                cur.execute(f"INSERT INTO identify VALUES ('{name_in_sql}', '{surname_in_sql}', '{user_id}')")
+                cur.execute(f"INSERT INTO stat (qty, user_id) VALUES (1, '{user_id}')")
             else:
                 # print(name + "3")
-                cur.execute("SELECT * FROM stat WHERE user_id = '{user_id}'")
+                cur.execute(f"SELECT * FROM stat WHERE user_id = '{user_id}'")
                 user_false_list = cur.fetchone()
-                cur.execute("DELETE FROM stat WHERE user_id = '{user_id}'")
+                cur.execute(f"DELETE FROM stat WHERE user_id = '{user_id}'")
                 cur.execute(
-                    "INSERT INTO stat VALUES ('{user_false_list[0]}', '{user_false_list[1]}', '{user_false_list[2]}')")
-                cur.execute("UPDATE stat SET qty = qty + 1 WHERE user_id = '{user_id}'")
-                cur.execute("SELECT * FROM identify WHERE user_id = '{user_id}'")
+                    f"INSERT INTO stat VALUES ('{user_false_list[0]}', '{user_false_list[1]}', '{user_false_list[2]}')")
+                cur.execute(f"UPDATE stat SET qty = qty + 1 WHERE user_id = '{user_id}'")
+                cur.execute(f"SELECT * FROM identify WHERE user_id = '{user_id}'")
                 user_false_list1 = cur.fetchone()
-                cur.execute("DELETE FROM identify WHERE user_id = '{user_id}'")
+                cur.execute(f"DELETE FROM identify WHERE user_id = '{user_id}'")
                 cur.execute(
-                    "INSERT INTO identify VALUES ('{user_false_list1[0]}', '{user_false_list1[1]}', '{user_false_list1[2]}')")
+                    f"INSERT INTO identify VALUES ('{user_false_list1[0]}', '{user_false_list1[1]}', '{user_false_list1[2]}')")
             conn.commit()
             cur.close()
     else:
@@ -406,22 +480,19 @@ def queue(bot, message):
 
 def intelligence(bot, message, intel):
     if message.chat.id == -1001415917929 and message.from_user.id != 777000:  # Matanove
-        # if message.chat.id == -458266883 and message.from_user.id != 777000:    #testgroup
-        # if message.chat.id == -1001418192939 and message.from_user.id != 777000:    #troll
+    # if message.chat.id == -458266883 and message.from_user.id != 777000:    #testgroup
+    # if message.chat.id == -1001418192939 and message.from_user.id != 777000:    #troll
         try:
             # print(intel)
             conn = pymysql.connect(host="matanovezno.mysql.pythonanywhere-services.com", user="matanovezno",
                                   password="P@ssw0rd", database="matanovezno$Matanove")
             cur = conn.cursor()
             user_id = message.from_user.id
-            query = "UPDATE `stat` SET `intel` = `intel` + {} WHERE `user_id` = '{}'".format(intel, user_id)
-            # print(query)
-            cur.execute(query)
+            cur.execute(f"UPDATE `stat` SET `intel` = `intel` + {intel} WHERE `user_id` = '{user_id}'")
             conn.commit()
             cur.close()
         except:
             pass
     else:
         pass
-        
 
