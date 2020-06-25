@@ -37,7 +37,7 @@ helpText = """ /report - повідомити про порушення
 /question - якщо виникло питання
 /task [складність]- розв'язуй задачі, стань першим в рейтингу(складність варіюється від 1 до 4, де 1-найлегший рівень)
 /top [msg або intel]- топ 10 учасників чату(msg-сортування за кількістю повідомлень, intel-за інтелектуальним рейтингом)
-/ban- перевір, чи можеш ти вирішувати наші завдання."""
+/ban- перевір, чи можеш ти вирішувати наші завдання"""
 
 
 def rnd(x):
@@ -240,7 +240,7 @@ def top_10(bot, message):
     if sort == "msg":
         msg = str('Рейтинг за кілкістю повідомлень\n')
         cur.execute("SELECT t1.name, t1.surname, t2.qty FROM identify=t1, stat=t2 WHERE t1.user_id = t2.user_id ORDER BY t2.qty DESC")
-        top_name = cur.fetchmany(size=10)
+        top_name = cur.fetchmany(size=15)
         # print(top_name)
         counter = 1
         for person in top_name:
@@ -257,7 +257,7 @@ def top_10(bot, message):
     elif sort == "intel":
         msg = str('Інтелектуальний рейтинг\n')
         cur.execute("SELECT t1.name, t1.surname, t2.intel FROM identify=t1, stat=t2 WHERE t1.user_id = t2.user_id ORDER BY t2.intel DESC")
-        top_name = cur.fetchmany(size=10)
+        top_name = cur.fetchmany(size=15)
         # print(top_name)
         counter = 1
         for person in top_name:
