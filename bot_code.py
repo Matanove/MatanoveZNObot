@@ -1,4 +1,5 @@
 # _*_ coding: UTF-8 _*_
+# test
 
 import random
 import time
@@ -132,9 +133,11 @@ def task_text(bot, message):
     try:
         tester = int(message.text[6:])
     except:
-        bot.reply_to(message,
-                     'Вказані невірні аргументи. Аргументом може слугувати лише число від 1 до 4 включно, де число позначає складність завдання')
-        return 0
+        try:
+            bot.reply_to(message,
+                     'Вказані неправильні аргументи. Аргументом може слугувати лише число від 1 до 4 включно, де число позначає складність завдання')
+        except:
+            pass
     cur.execute("SELECT user_id FROM stat WHERE isbanned = 1")
     users_ban_id = cur.fetchall()
     banned = []
@@ -147,29 +150,29 @@ def task_text(bot, message):
             counter = 0
             for line in listQ:
                 counter += 1
-                if counter == int(message.text[6]):
+                if str(counter) == str(message.text[6]):
                     level = int(message.text[6])
                     quantity = int(line)
-            a = trueRandom(quantity, level)
-            path = r"/home/matanovezno/Data/Tasks/Questions/" + message.text[6] + "/" + str(a) + ".png"
-            file = open(path, 'rb')
-            try:
-                bot.send_photo(message.chat.id, file,
-                              caption='Відповіддю є число в десятковому записі. Відповідь округлюється до трьох знаків після коми за правилами округлення.\nРівень складності: ' + str(
-                                  level) + '\nПриклад: 16; -38,8; 0; 44.268. \nТермін виконання - ' + str(
-                                  level * 10) + ' хвилин')
-            except:
-                pass
-            isSolving = True
-            path2 = "/home/matanovezno/Data/Tasks/Solutions/" + str(level) + "/sol.txt"
-            counter = 0
-            sol = open(path2, 'r')
-            for line in sol:
-                counter += 1
-                if counter == a:
-                    rightAnswer = line
-            file.close()
-            sol.close()
+                    a = trueRandom(quantity, level)
+                    path = r"/home/matanovezno/Data/Tasks/Questions/" + message.text[6] + "/" + str(a) + ".png"
+                    file = open(path, 'rb')
+                    try:
+                        bot.send_photo(message.chat.id, file,
+                                      caption='Відповіддю є число в десятковому записі. Відповідь округлюється до трьох знаків після коми за правилами округлення.\nРівень складності: ' + str(
+                                      level) + '\nПриклад: 16; -38,8; 0; 44.268. \nТермін виконання - ' + str(
+                                      level * 10) + ' хвилин')
+                    except:
+                        pass
+                    isSolving = True
+                    path2 = "/home/matanovezno/Data/Tasks/Solutions/" + str(level) + "/sol.txt"
+                    counter = 0
+                    sol = open(path2, 'r')
+                    for line in sol:
+                        counter += 1
+                        if counter == a:
+                            rightAnswer = line
+                    file.close()
+                    sol.close()
             listQ.close()
             tm = time.time()
         else:
@@ -183,7 +186,7 @@ def task_text(bot, message):
     else:
         try:
             bot.reply_to(message,
-                         'Вказані невірні аргументи. Аргументом може слугувати лише число від 1 до 4 включно, де число позначає складність завдання')
+                         'Вказані неправильні аргументи. Аргументом може слугувати лише число від 1 до 4 включно, де число позначає складність завдання')
         except:
             pass
         return 0
@@ -272,7 +275,7 @@ def top_10(bot, message):
     else:
         try:
             bot.reply_to(message,
-                         'Вказані невірні аргументи. Аргументом може слугувати лише msg або intel')
+                         'Вказані неправильні аргументи. Аргументом може слугувати лише msg або intel')
         except:
             pass
     conn.commit()
@@ -321,10 +324,13 @@ def ban_list(bot, message):
     banned = []
     for user_ban_id in users_ban_id:
         banned.append(user_ban_id[0])
-    if message.from_user.id in banned:
-        bot.reply_to(message, 'Ви не можете вирішувати задачі')
-    else:
-        bot.reply_to(message, 'Ви можете вирішувати задачі')
+    try:
+        if message.from_user.id in banned:
+            bot.reply_to(message, 'Ви не можете вирішувати задачі')
+        else:
+            bot.reply_to(message, 'Ви можете вирішувати задачі')
+    except:
+        pass
 
 def add_param(bot, message):
     global isPAdd
@@ -445,10 +451,8 @@ def queue(bot, message):
             cur = conn.cursor()
             name = (str(mssg.from_user.first_name), "")[str(mssg.from_user.first_name) == "None"]
             name_in_sql = conn.escape_string(name)
-            print(name_in_sql)
             surname = (str(mssg.from_user.last_name), "")[str(mssg.from_user.last_name) == "None"]
             surname_in_sql = conn.escape_string(surname)
-            print(surname_in_sql)
             user_id = mssg.from_user.id
             cur.execute(f"SELECT user_id FROM identify WHERE user_id = '{user_id}'")
             user_id_list = cur.fetchall()
