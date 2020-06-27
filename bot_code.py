@@ -451,7 +451,7 @@ def queue(bot, message):
             user_id_list = cur.fetchall()
             if len(user_id_list) == 1:
                 # print(name + "1")
-                cur.execute(f"UPDATE stat SET qty = qty + 1 WHERE user_id = '{user_id}'")
+                cur.execute(f"UPDATE stat SET name = '{name_in_sql}', surname = '{surname_in_sql}', qty = qty + 1 WHERE user_id = '{user_id}'")
             elif len(user_id_list) == 0:
                 # print(name + "2")
                 cur.execute(f"INSERT INTO identify VALUES ('{name_in_sql}', '{surname_in_sql}', '{user_id}')")
