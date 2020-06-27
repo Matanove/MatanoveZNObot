@@ -232,7 +232,6 @@ def top_10(bot, message):
     # print(msg)
     sort = message.text[5:]
     sort = sort.replace(" ", "")
-    # print(sort)
     conn = pymysql.connect(host=setup.host, user=setup.user, password=setup.password, database=setup.database)
     cur = conn.cursor()
     if sort == "msg":
