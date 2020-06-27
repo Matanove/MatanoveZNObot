@@ -345,7 +345,6 @@ def add_param(bot, message):
     bot.reply_to(message, 'Приму параметры только если Илона отсосёт...')
 
 
-# Новий учасник групи зайшов в чат
 def hello_message(bot, message):
     try:
         bot.reply_to(message, helloText)
@@ -450,14 +449,11 @@ def queue(bot, message):
             cur.execute(f"SELECT user_id FROM identify WHERE user_id = '{user_id}'")
             user_id_list = cur.fetchall()
             if len(user_id_list) == 1:
-                # print(name + "1")
                 cur.execute(f"UPDATE stat SET name = '{name_in_sql}', surname = '{surname_in_sql}', qty = qty + 1 WHERE user_id = '{user_id}'")
             elif len(user_id_list) == 0:
-                # print(name + "2")
                 cur.execute(f"INSERT INTO identify VALUES ('{name_in_sql}', '{surname_in_sql}', '{user_id}')")
                 cur.execute(f"INSERT INTO stat (qty, user_id) VALUES (1, '{user_id}')")
             else:
-                # print(name + "3")
                 cur.execute(f"SELECT * FROM stat WHERE user_id = '{user_id}'")
                 user_false_list = cur.fetchone()
                 cur.execute(f"DELETE FROM stat WHERE user_id = '{user_id}'")
@@ -480,7 +476,6 @@ def intelligence(bot, message, intel):
     # if message.chat.id == -458266883 and message.from_user.id != 777000:    #testgroup
     # if message.chat.id == -1001418192939 and message.from_user.id != 777000:    #troll
         try:
-            # print(intel)
             conn = pymysql.connect(host=setup.host, user=setup.user, password=setup.password, database=setup.database)
             cur = conn.cursor()
             user_id = message.from_user.id
