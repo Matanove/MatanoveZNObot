@@ -130,64 +130,64 @@ def task_text(bot, message):
         isSolving = False
     try:
         tester = int(message.text[6:])
+        cur.execute("SELECT user_id FROM stat WHERE isbanned = 1")
+        users_ban_id = cur.fetchall()
+        banned = []
+        for user_ban_id in users_ban_id:
+            banned.append(user_ban_id[0])
+        if not isSolving and (tester == 1 or tester == 2 or tester == 3 or tester == 4):
+            if message.from_user.id not in banned:
+                listQ = open("/home/matanovezno/Data/Tasks/q.txt", 'r')
+                quantity = 0
+                counter = 0
+                for line in listQ:
+                    counter += 1
+                    if str(counter) == str(message.text[6]):
+                        level = int(message.text[6])
+                        quantity = int(line)
+                        a = trueRandom(quantity, level)
+                        path = r"/home/matanovezno/Data/Tasks/Questions/" + message.text[6] + "/" + str(a) + ".png"
+                        file = open(path, 'rb')
+                        try:
+                            bot.send_photo(message.chat.id, file,
+                                           caption='Відповіддю є число в десятковому записі. Відповідь округлюється до трьох знаків після коми за правилами округлення.\nРівень складності: ' + str(
+                                               level) + '\nПриклад: 16; -38,8; 0; 44.268. \nТермін виконання - ' + str(
+                                               level * 10) + ' хвилин')
+                        except:
+                            pass
+                        isSolving = True
+                        path2 = "/home/matanovezno/Data/Tasks/Solutions/" + str(level) + "/sol.txt"
+                        counter = 0
+                        sol = open(path2, 'r')
+                        for line in sol:
+                            counter += 1
+                            if counter == a:
+                                rightAnswer = line
+                        file.close()
+                        sol.close()
+                listQ.close()
+                tm = time.time()
+            else:
+                bot.reply_to(message, 'Ви не можете вирішувати завдання')
+        elif isSolving:
+            file = open(path, 'rb')
+            try:
+                bot.send_photo(message.chat.id, file, caption=r"Спочатку розв'яжіть запропоновану задачу!")
+            except:
+                pass
+        else:
+            try:
+                bot.reply_to(message,
+                             'Вказані неправильні аргументи. Аргументом може слугувати лише число від 1 до 4 включно, де число позначає складність завдання')
+            except:
+                pass
+            return 0
     except:
         try:
             bot.reply_to(message,
                      'Вказані неправильні аргументи. Аргументом може слугувати лише число від 1 до 4 включно, де число позначає складність завдання')
         except:
             pass
-    cur.execute("SELECT user_id FROM stat WHERE isbanned = 1")
-    users_ban_id = cur.fetchall()
-    banned = []
-    for user_ban_id in users_ban_id:
-        banned.append(user_ban_id[0])
-    if not isSolving and (tester == 1 or tester == 2 or tester == 3 or tester == 4):
-        if message.from_user.id not in banned:
-            listQ = open("/home/matanovezno/Data/Tasks/q.txt", 'r')
-            quantity = 0
-            counter = 0
-            for line in listQ:
-                counter += 1
-                if str(counter) == str(message.text[6]):
-                    level = int(message.text[6])
-                    quantity = int(line)
-                    a = trueRandom(quantity, level)
-                    path = r"/home/matanovezno/Data/Tasks/Questions/" + message.text[6] + "/" + str(a) + ".png"
-                    file = open(path, 'rb')
-                    try:
-                        bot.send_photo(message.chat.id, file,
-                                      caption='Відповіддю є число в десятковому записі. Відповідь округлюється до трьох знаків після коми за правилами округлення.\nРівень складності: ' + str(
-                                      level) + '\nПриклад: 16; -38,8; 0; 44.268. \nТермін виконання - ' + str(
-                                      level * 10) + ' хвилин')
-                    except:
-                        pass
-                    isSolving = True
-                    path2 = "/home/matanovezno/Data/Tasks/Solutions/" + str(level) + "/sol.txt"
-                    counter = 0
-                    sol = open(path2, 'r')
-                    for line in sol:
-                        counter += 1
-                        if counter == a:
-                            rightAnswer = line
-                    file.close()
-                    sol.close()
-            listQ.close()
-            tm = time.time()
-        else:
-            bot.reply_to(message, 'Ви не можете вирішувати завдання')
-    elif isSolving:
-        file = open(path, 'rb')
-        try:
-            bot.send_photo(message.chat.id, file, caption=r"Спочатку розв'яжіть запропоновану задачу!")
-        except:
-            pass
-    else:
-        try:
-            bot.reply_to(message,
-                         'Вказані неправильні аргументи. Аргументом може слугувати лише число від 1 до 4 включно, де число позначає складність завдання')
-        except:
-            pass
-        return 0
     conn.commit()
     cur.close()
 
