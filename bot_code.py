@@ -7,7 +7,6 @@ from collections import deque
 import math
 import setup
 
-database = setup.mysqldata()
 q = deque()
 path = ""
 isSolving = False
@@ -125,7 +124,7 @@ def task_text(bot, message):
     global tm
     tester = 0
     tm1 = time.time()
-    conn = pymysql.connect(database)
+    conn = pymysql.connect(host=setup.host, user=setup.user, password=setup.password, database=setup.database)
     cur = conn.cursor()
     if int(tm1) - int(tm) > 600 * level:
         isSolving = False
@@ -234,7 +233,7 @@ def top_10(bot, message):
     sort = message.text[5:]
     sort = sort.replace(" ", "")
     # print(sort)
-    conn = pymysql.connect(database)
+    conn = pymysql.connect(host=setup.host, user=setup.user, password=setup.password, database=setup.database)
     cur = conn.cursor()
     if sort == "msg":
         msg = str('Рейтинг за кілкістю повідомлень\n')
@@ -282,7 +281,7 @@ def top_10(bot, message):
 def ban_command(bot, message):
     sort = message.text[5:]
     sort = sort.replace(" ", "")
-    conn = pymysql.connect(database)
+    conn = pymysql.connect(host=setup.host, user=setup.user, password=setup.password, database=setup.database)
     cur = conn.cursor()
     if sort == 'add' and message.reply_to_message != 'None':
         try:
@@ -313,7 +312,7 @@ def ban_command(bot, message):
 
 
 def ban_list(bot, message):
-    conn = pymysql.connect(database)
+    conn = pymysql.connect(host=setup.host, user=setup.user, password=setup.password, database=setup.database)
     cur = conn.cursor()
     cur.execute("SELECT user_id FROM stat WHERE isbanned = 1")
     users_ban_id = cur.fetchall()
@@ -366,7 +365,7 @@ def send_text(bot, message):
     global isSolving
     tm1 = time.time()
     txt = message.text
-    conn = pymysql.connect(database)
+    conn = pymysql.connect(host=setup.host, user=setup.user, password=setup.password, database=setup.database)
     cur = conn.cursor()
     cur.execute("SELECT user_id FROM stat WHERE isbanned = 1")
     users_ban_id = cur.fetchall()
@@ -441,7 +440,7 @@ def queue(bot, message):
         q.append(message)
         while len(q) > 0:
             mssg = q.popleft()
-            conn = pymysql.connect(database)
+            conn = pymysql.connect(host=setup.host, user=setup.user, password=setup.password, database=setup.database)
             cur = conn.cursor()
             name = (str(mssg.from_user.first_name), "")[str(mssg.from_user.first_name) == "None"]
             name_in_sql = conn.escape_string(name)
@@ -482,7 +481,7 @@ def intelligence(bot, message, intel):
     # if message.chat.id == -1001418192939 and message.from_user.id != 777000:    #troll
         try:
             # print(intel)
-            conn = pymysql.connect(database)
+            conn = pymysql.connect(host=setup.host, user=setup.user, password=setup.password, database=setup.database)
             cur = conn.cursor()
             user_id = message.from_user.id
             cur.execute(f"UPDATE `stat` SET `intel` = `intel` + {intel} WHERE `user_id` = '{user_id}'")
