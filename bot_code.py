@@ -91,7 +91,7 @@ def help_message(bot, message):
         sndmssg = bot.send_message(message.chat.id, helpText)
         try:
             answer_help = sndmssg.message_id
-            request_help = message.from_user.id
+            request_help = message.message_id
         except:
             pass
     except:
