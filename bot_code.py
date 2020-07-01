@@ -78,6 +78,8 @@ def start_message(bot, message):
 
 def help_message(bot, message):
     # -1001415917929
+    global request_help
+    global answer_help
     try:
         bot.delete_message(-1001415917929, request_help)
         bot.delete_message(-1001415917929, answer_help)
