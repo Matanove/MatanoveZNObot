@@ -77,13 +77,19 @@ def start_message(bot, message):
 
 
 def help_message(bot, message):
+    # -1001415917929
+    try:
+        bot.delete_message(-1001415917929, request_help)
+        bot.delete_message(-1001415917929, answer_help)
+    except:
+        pass
     conn = pymysql.connect(host=setup.host, user=setup.user, password=setup.password, database=setup.database)
     cur = conn.cursor()
     try:
         sndmssg = bot.send_message(message.chat.id, helpText)
-        print(sndmssg)
         try:
-            print(sndmssg.message_id)
+            answer_help = sndmssg.message_id
+            request_help = message.from_user.id
         except:
             pass
     except:
