@@ -72,19 +72,23 @@ def pts():
 def start_message(bot, message):
     global request_start
     global answer_start
+    global achatid_start
+    global rchatid_start
     try:
-        bot.delete_message(-1001415917929, request_start)
+        bot.delete_message(rchatid_start, request_start)
     except:
         pass
     try:
-        bot.delete_message(-1001415917929, answer_start)
+        bot.delete_message(achatid_start, answer_start)
     except:
         pass
     try:
         sndmssgstrt = bot.send_message(message.chat.id, 'Привіт! Я допомагаю в групі  @matan_help')
         try:
             answer_start = sndmssgstrt.message_id
+            achatid_start = sndmssgstrt.chat.id
             request_start = message.message_id
+            rchatid_start = message.chat.id
         except:
             pass
     except:
@@ -376,19 +380,23 @@ def add_param(bot, message):
 def hello_message(bot, message):
     global new_user
     global answer_user
+    global achatid_user
+    global rchatid_user
     try:
-        bot.delete_message(-1001415917929, new_user)
+        bot.delete_message(rchatid_user, new_user)
     except:
         pass
     try:
-        bot.delete_message(-1001415917929, answer_user)
+        bot.delete_message(achatid_user, answer_user)
     except:
         pass
     try:
         sndmssghll = bot.reply_to(message, helloText)
         try:
             answer_user = sndmssghll.message_id
+            achatid_user = sndmssghll.chat.id
             new_user = message.message_id
+            rchatid_user = message.chat.id
         except:
             pass
     except:
