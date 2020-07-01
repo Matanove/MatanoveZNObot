@@ -77,10 +77,15 @@ def start_message(bot, message):
 
 
 def help_message(bot, message):
+    conn = pymysql.connect(host=setup.host, user=setup.user, password=setup.password, database=setup.database)
+    cur = conn.cursor()
     try:
-        bot.send_message(message.chat.id, helpText)
+        sndmssg = bot.send_message(message.chat.id, helpText)
+        print(sndmssg)
     except:
         pass
+    conn.commit()
+    cur.close()
 
 
 def report_message(bot, message):
@@ -121,8 +126,7 @@ def task_text(bot, message):
     global rightAnswer
     global path
     global level
-    global tm
-    tester = 0
+    global tm  
     tm1 = time.time()
     conn = pymysql.connect(host=setup.host, user=setup.user, password=setup.password, database=setup.database)
     cur = conn.cursor()
@@ -229,16 +233,14 @@ def add_task(bot, message):
 
 
 def top_10(bot, message):
-    # print(msg)
     sort = message.text[5:]
     sort = sort.replace(" ", "")
     conn = pymysql.connect(host=setup.host, user=setup.user, password=setup.password, database=setup.database)
     cur = conn.cursor()
     if sort == "msg":
-        msg = str('Рейтинг за кілкістю повідомлень\n')
+        msg = str('Рейтинг за кількістю повідомлень\n')
         cur.execute("SELECT t1.name, t1.surname, t2.qty FROM identify=t1, stat=t2 WHERE t1.user_id = t2.user_id ORDER BY t2.qty DESC")
         top_name = cur.fetchmany(size=15)
-        # print(top_name)
         counter = 1
         for person in top_name:
             msg += '<b><i>' + str(counter) + '. '
@@ -246,7 +248,6 @@ def top_10(bot, message):
             msg += (str(person[1]) + ' - ', '- ')[person[1] == '']
             msg += '<b>' + str(person[2]) + '</b>\n'
             counter += 1
-        # print(msg)
         try:
             bot.reply_to(message, msg, parse_mode="HTML")
         except:
@@ -255,7 +256,6 @@ def top_10(bot, message):
         msg = str('Інтелектуальний рейтинг\n')
         cur.execute("SELECT t1.name, t1.surname, t2.intel FROM identify=t1, stat=t2 WHERE t1.user_id = t2.user_id ORDER BY t2.intel DESC")
         top_name = cur.fetchmany(size=15)
-        # print(top_name)
         counter = 1
         for person in top_name:
             msg += '<b><i>' + str(counter) + '. '
@@ -263,7 +263,6 @@ def top_10(bot, message):
             msg += (str(person[1]) + ' - ', '- ')[person[1] == '']
             msg += '<b>' + str(person[2]) + '</b>\n'
             counter += 1
-        # print(msg)
         try:
             bot.reply_to(message, msg, parse_mode="HTML")
         except:
