@@ -82,6 +82,10 @@ def help_message(bot, message):
     try:
         sndmssg = bot.send_message(message.chat.id, helpText)
         print(sndmssg)
+        try:
+            print(sndmssg.message_id)
+        except:
+            pass
     except:
         pass
     conn.commit()
