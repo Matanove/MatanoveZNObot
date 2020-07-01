@@ -95,19 +95,23 @@ def help_message(bot, message):
     # -1001415917929
     global request_help
     global answer_help
+    global achatid_help
+    global rchatid_help
     try:
-        bot.delete_message(-1001415917929, request_help)
+        bot.delete_message(rchatid_help, request_help)
     except:
         print('1')
     try:
-        bot.delete_message(-1001415917929, answer_help)
+        bot.delete_message(achatid_help, answer_help)
     except:
         print('2')
     try:
         sndmssghlp = bot.send_message(message.chat.id, helpText)
         try:
             answer_help = sndmssghlp.message_id
+            achatid_help = sndmssghlp.chat.id
             request_help = message.message_id
+            rchatid_help = message.chat.id
         except:
             print('3')
     except:
