@@ -70,8 +70,23 @@ def pts():
 
 
 def start_message(bot, message):
+    global request_start
+    global answer_start
     try:
-        bot.send_message(message.chat.id, 'Привіт! Я допомагаю в групі  @matan_help')
+        bot.delete_message(-1001415917929, request_start)
+    except:
+        pass
+    try:
+        bot.delete_message(-1001415917929, answer_start)
+    except:
+        pass
+    try:
+        sndmssgstrt = bot.send_message(message.chat.id, 'Привіт! Я допомагаю в групі  @matan_help')
+        try:
+            answer_start = sndmssgstrt.message_id
+            request_start = message.message_id
+        except:
+            pass
     except:
         pass
 
@@ -81,23 +96,22 @@ def help_message(bot, message):
     global request_help
     global answer_help
     try:
-        bot.delete_message(-401837049, request_help)
-        bot.delete_message(-401837049, answer_help)
+        bot.delete_message(-1001415917929, request_help)
     except:
         pass
-    conn = pymysql.connect(host=setup.host, user=setup.user, password=setup.password, database=setup.database)
-    cur = conn.cursor()
     try:
-        sndmssg = bot.send_message(message.chat.id, helpText)
+        bot.delete_message(-1001415917929, answer_help)
+    except:
+        pass
+    try:
+        sndmssghlp = bot.send_message(message.chat.id, helpText)
         try:
-            answer_help = sndmssg.message_id
+            answer_help = sndmssghlp.message_id
             request_help = message.message_id
         except:
             pass
     except:
         pass
-    conn.commit()
-    cur.close()
 
 
 def report_message(bot, message):
@@ -356,16 +370,23 @@ def add_param(bot, message):
 
 
 def hello_message(bot, message):
+    global new_user
+    global answer_user
     try:
-        bot.reply_to(message, helloText)
+        bot.delete_message(-1001415917929, new_user)
     except:
         pass
-    global PrevHelloMessageId
-    global NewHelloMessageId
-    PrevHelloMessageId = int(NewHelloMessageId)
-    NewHelloMessageId = int(message.message_id) + 1
     try:
-        bot.delete_message(message.chat.id, PrevHelloMessageId)
+        bot.delete_message(-1001415917929, answer_user)
+    except:
+        pass
+    try:
+        sndmssghll = bot.reply_to(message, helloText)
+        try:
+            answer_user = sndmssghll.message_id
+            new_user = message.message_id
+        except:
+            pass
     except:
         pass
 
