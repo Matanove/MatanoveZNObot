@@ -81,8 +81,8 @@ def help_message(bot, message):
     global request_help
     global answer_help
     try:
-        bot.delete_message(-1001415917929, request_help)
-        bot.delete_message(-1001415917929, answer_help)
+        bot.delete_message(-401837049, request_help)
+        bot.delete_message(-401837049, answer_help)
     except:
         pass
     conn = pymysql.connect(host=setup.host, user=setup.user, password=setup.password, database=setup.database)
