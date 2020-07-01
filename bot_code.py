@@ -98,20 +98,20 @@ def help_message(bot, message):
     try:
         bot.delete_message(-1001415917929, request_help)
     except:
-        pass
+        print('1')
     try:
         bot.delete_message(-1001415917929, answer_help)
     except:
-        pass
+        print('2')
     try:
         sndmssghlp = bot.send_message(message.chat.id, helpText)
         try:
             answer_help = sndmssghlp.message_id
             request_help = message.message_id
         except:
-            pass
+            print('3')
     except:
-        pass
+        print('4')
 
 
 def report_message(bot, message):
