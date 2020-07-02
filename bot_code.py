@@ -83,9 +83,6 @@ def start_message(bot, message):
     try:
         message_delete(chatid_start, request_start, bot)
         message_delete(chatid_start, answer_start, bot)
-    except:
-        pass
-    try:
         message_start = bot.send_message(message.chat.id, 'Привіт! Я допомагаю в групі  @matan_help')
         answer_start = message_start.message_id
         request_start = message.message_id
@@ -99,11 +96,8 @@ def help_message(bot, message):
     global request_help
     global chatid_help
     try:
-        message_delete(chatid_start, request_start, bot)
-        message_delete(chatid_start, answer_start, bot)
-    except:
-        pass
-    try:
+        message_delete(chatid_help, request_help, bot)
+        message_delete(chatid_help, answer_help, bot)
         message_help = bot.send_message(message.chat.id, helpText)
         answer_help = message_help.message_id
         request_help = message.message_id
@@ -375,9 +369,6 @@ def hello_message(bot, message):
     try:
         message_delete(chatid_hello, request_hello, bot)
         message_delete(chatid_hello, answer_hello, bot)
-    except:
-        pass
-    try:
         message_hello = bot.reply_to(message, helloText)
         answer_hello = message_hello.message_id
         request_hello = message.message_id
