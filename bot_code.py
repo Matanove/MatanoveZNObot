@@ -69,57 +69,47 @@ def pts():
         pow(2, (level - 1) / 2.0) * pow(3, float(level) - float(tm1 / (120.0 * pow(10, float(level + 2) / 3.0)))))
 
 
+def message_delete(chat_id, message_id):
+    try:
+        bot.delete_message(chat_id, message_id)
+    except:
+        pass
+
+
 def start_message(bot, message):
-    global request_start
     global answer_start
-    global achatid_start
-    global rchatid_start
+    global request_start
+    global chatid_start
     try:
-        bot.delete_message(rchatid_start, request_start)
+        message_delete(chatid_start, request_start)
+        message_delete(chatid_start, answer_start)
     except:
         pass
     try:
-        bot.delete_message(achatid_start, answer_start)
-    except:
-        pass
-    try:
-        sndmssgstrt = bot.send_message(message.chat.id, 'Привіт! Я допомагаю в групі  @matan_help')
-        try:
-            answer_start = sndmssgstrt.message_id
-            achatid_start = sndmssgstrt.chat.id
-            request_start = message.message_id
-            rchatid_start = message.chat.id
-        except:
-            pass
+        message_start = bot.send_message(message.chat.id, 'Привіт! Я допомагаю в групі  @matan_help')
+        answer_start = message_start.message_id
+        request_start = message.message_id
+        chatid_start = message.chat.id
     except:
         pass
 
 
 def help_message(bot, message):
-    # -1001415917929
-    global request_help
     global answer_help
-    global achatid_help
-    global rchatid_help
+    global request_help
+    global chatid_help
     try:
-        bot.delete_message(rchatid_help, request_help)
+        message_delete(chatid_start, request_start)
+        message_delete(chatid_start, answer_start)
     except:
-        print('1')
+        pass
     try:
-        bot.delete_message(achatid_help, answer_help)
+        message_help = bot.send_message(message.chat.id, helpText)
+        answer_help = message_help.message_id
+        request_help = message.message_id
+        chatid_help = message.chat.id
     except:
-        print('2')
-    try:
-        sndmssghlp = bot.send_message(message.chat.id, helpText)
-        try:
-            answer_help = sndmssghlp.message_id
-            achatid_help = sndmssghlp.chat.id
-            request_help = message.message_id
-            rchatid_help = message.chat.id
-        except:
-            print('3')
-    except:
-        print('4')
+        pass
 
 
 def report_message(bot, message):
@@ -359,6 +349,7 @@ def ban_list(bot, message):
     except:
         pass
 
+
 def add_param(bot, message):
     global isPAdd
     if int(message.chat.id) != -1001382702607:
@@ -378,27 +369,19 @@ def add_param(bot, message):
 
 
 def hello_message(bot, message):
-    global new_user
-    global answer_user
-    global achatid_user
-    global rchatid_user
+    global request_hello
+    global answer_hello
+    global chatid_hello
     try:
-        bot.delete_message(rchatid_user, new_user)
+        message_delete(chatid_hello, request_hello)
+        message_delete(chatid_hello, answer_hello)
     except:
         pass
     try:
-        bot.delete_message(achatid_user, answer_user)
-    except:
-        pass
-    try:
-        sndmssghll = bot.reply_to(message, helloText)
-        try:
-            answer_user = sndmssghll.message_id
-            achatid_user = sndmssghll.chat.id
-            new_user = message.message_id
-            rchatid_user = message.chat.id
-        except:
-            pass
+        message_hello = bot.reply_to(message, helloText)
+        answer_hello = message_hello.message_id
+        request_hello = message.message_id
+        chatid_hello = message.chat.id
     except:
         pass
 
