@@ -69,7 +69,7 @@ def pts():
         pow(2, (level - 1) / 2.0) * pow(3, float(level) - float(tm1 / (120.0 * pow(10, float(level + 2) / 3.0)))))
 
 
-def message_delete(chat_id, message_id):
+def message_delete(chat_id, message_id, bot):
     try:
         bot.delete_message(chat_id, message_id)
     except:
@@ -81,8 +81,8 @@ def start_message(bot, message):
     global request_start
     global chatid_start
     try:
-        message_delete(chatid_start, request_start)
-        message_delete(chatid_start, answer_start)
+        message_delete(chatid_start, request_start, bot)
+        message_delete(chatid_start, answer_start, bot)
     except:
         pass
     try:
@@ -99,8 +99,8 @@ def help_message(bot, message):
     global request_help
     global chatid_help
     try:
-        message_delete(chatid_start, request_start)
-        message_delete(chatid_start, answer_start)
+        message_delete(chatid_start, request_start, bot)
+        message_delete(chatid_start, answer_start, bot)
     except:
         pass
     try:
@@ -373,8 +373,8 @@ def hello_message(bot, message):
     global answer_hello
     global chatid_hello
     try:
-        message_delete(chatid_hello, request_hello)
-        message_delete(chatid_hello, answer_hello)
+        message_delete(chatid_hello, request_hello, bot)
+        message_delete(chatid_hello, answer_hello, bot)
     except:
         pass
     try:
