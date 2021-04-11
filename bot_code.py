@@ -1,5 +1,5 @@
 # _*_ coding: UTF-8 _*_
-# fuck1
+
 import random
 import time
 import pymysql
