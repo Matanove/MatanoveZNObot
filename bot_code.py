@@ -139,21 +139,20 @@ def question_message(bot, message):
 
 
 def parameters_text(bot, message):
-	print('1')
-# 	global tmpar
-# 	if time.time()-tmpar>600:
-# 		tmpar=time.time()
-# 		listQ = open("/home/matanovezno/Data/Tasks/q.txt", 'r')
-# 		counter=0
-# 		quantity=0
-# 		for line in listQ:
-# 			counter+=1
-# 			if counter==5:
-# 				quantity=int(line)
-# 		a = random.randint(1, quantity)
-# 		pth = r"/home/matanovezno/Data/Tasks/Questions/5/" + str(a) + ".png"
-# 		file = open(pth, 'rb')
-# 		bot.send_photo(message.chat.id, file, caption="Розв'язання цих задач на параметри не впливає на інтелектуальний рейтинг. Тут ви можете знайти лише вибрані задачі підвищеної складності. Викликати іншу задачу можна лише через 10 хвилин після виклику даної задачі. Відповідь автоматично не перевіряється.")
+	global tmpar
+	if time.time()-tmpar>600:
+		tmpar=time.time()
+		listQ = open("/home/matanovezno/Data/Tasks/q.txt", 'r')
+		counter=0
+		quantity=0
+		for line in listQ:
+			counter+=1
+			if counter==5:
+				quantity=int(line)
+		a = random.randint(1, quantity)
+		pth = r"/home/matanovezno/Data/Tasks/Questions/5/" + str(a) + ".png"
+		file = open(pth, 'rb')
+		bot.send_photo(message.chat.id, file, caption="Розв'язання цих задач на параметри не впливає на інтелектуальний рейтинг. Тут ви можете знайти лише вибрані задачі підвищеної складності. Викликати іншу задачу можна лише через 10 хвилин після виклику даної задачі. Відповідь автоматично не перевіряється.")
 
 
 def task_text(bot, message):
