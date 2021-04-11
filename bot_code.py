@@ -465,7 +465,7 @@ def handle_docs_photo(bot, message):
             src = "/home/matanovezno/Data/Tasks/Questions/5/" + str(add_lvls_list[add_level - 1]) + ".png"
             with open(src, 'wb') as new_file:
                 new_file.write(downloaded_file)
-                bot.reply_to(message, "Илона отлично сосёт!")
+                bot.reply_to(message, "Ok!")
             f = open("/home/matanovezno/Data/Tasks/q.txt", 'w')
             for i in add_lvls_list:
                 f.write(str(i) + '\n')
