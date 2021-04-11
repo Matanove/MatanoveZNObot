@@ -44,8 +44,8 @@ def command_sorting(message):
             bot_code.report_message(bot, message)
         elif str(message.text) == '/question':
             bot_code.question_message(bot, message)
-        # elif str(message.text) == '/parameters':
-        #     bot_code.parameters_text(bot, message)
+        elif str(message.text) == '/parameters':
+            bot_code.parameters_text(bot, message)
         elif str(message.text)[:5] == '/task':
             bot_code.task_text(bot, message)
         elif str(message.text)[:4] == '/add':
