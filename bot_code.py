@@ -378,6 +378,8 @@ def ban_list(bot, message):
     cur.execute("SELECT user_id FROM stat WHERE isbanned = 1")
     users_ban_id = cur.fetchall()
     banned = []
+    conn.commit()
+    cur.close()
     for user_ban_id in users_ban_id:
         banned.append(user_ban_id[0])
     try:
