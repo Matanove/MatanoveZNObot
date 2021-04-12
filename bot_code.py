@@ -168,7 +168,7 @@ def parameters_text(bot, message):
                 quantity = int(line)
         a = random.randint(1, quantity)
         Parpath = r"/home/matanovezno/Data/Tasks/Questions/5/" + str(a) + ".png"
-        file = open(Parpath, 'r')
+        file = open(Parpath, 'rb')
         try:
             bot.send_photo(message.chat.id, file,
                            caption="Розв'язання цих задач на параметри не впливає на інтелектуальний рейтинг. Тут ви можете знайти лише вибрані задачі підвищеної складності. Викликати іншу задачу можна лише через 10 хвилин після виклику даної задачі. Відповідь автоматично не перевіряється.")
