@@ -10,6 +10,7 @@ import setup
 q = deque()
 path = ""
 isSolving = False
+isParSolving = False
 rightAnswer = 0
 level = 0
 tm = 0
