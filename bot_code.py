@@ -1,5 +1,5 @@
 # _*_ coding: UTF-8 _*_
-# fuck
+# fuck1
 import random
 import time
 import pymysql
@@ -149,8 +149,6 @@ def parameters_text(bot, message):
     cur.execute("SELECT user_id FROM stat WHERE isbanned = 1")
     users_ban_id = cur.fetchall()
     banned = []
-    conn.commit
-    cur.close
     for user_ban_id in users_ban_id:
         banned.append(user_ban_id[0])
     if time.time()-tmPar>600:
@@ -169,8 +167,7 @@ def parameters_text(bot, message):
         file = open(Parpath, 'rb')
         try:
             bot.send_photo(message.chat.id, file, caption="Розв'язання цих задач на параметри не впливає на інтелектуальний рейтинг. Тут ви можете знайти лише вибрані задачі підвищеної складності. Викликати іншу задачу можна лише через 10 хвилин після виклику даної задачі. Відповідь автоматично не перевіряється.")
-            IsParSolving = True
-	except:
+        except:
             pass
     elif IsParSolving and message.from_user.id not in banned:
         file = open(Parpath, 'rb')
@@ -183,6 +180,9 @@ def parameters_text(bot, message):
              bot.reply_to(message, 'Ви не можете вирішувати завдання')
         except:
             pass
+    conn.commit
+    cur.close
+
 
 
 def task_text(bot, message):
@@ -190,7 +190,7 @@ def task_text(bot, message):
     global rightAnswer
     global path
     global level
-    global tm  
+    global tm
     tm1 = time.time()
     conn = pymysql.connect(host=setup.host, user=setup.user, password=setup.password, database=setup.database)
     cur = conn.cursor()
