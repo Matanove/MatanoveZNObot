@@ -127,7 +127,7 @@ def help_message(bot, message):
 
 def report_message(bot, message):
     try:
-        bot.reply_to(message, '@mataner @Gazelka andead422')
+        bot.reply_to(message, '@mataner @Gazelka @andead422')
         bot.send_message(-1001418192939, 'Розбійник в @matan_help')
     except:
         pass
@@ -135,7 +135,7 @@ def report_message(bot, message):
 
 def question_message(bot, message):
     try:
-        bot.reply_to(message, '@mataner @Gazelka andead422')
+        bot.reply_to(message, '@mataner @Gazelka @andead422')
         bot.send_message(-1001418192939, 'Дебіл в @matan_help')
     except:
         pass
@@ -197,16 +197,18 @@ def task_text(bot, message):
     global tm
     tm1 = time.time()
     conn = pymysql.connect(host=setup.host, user=setup.user, password=setup.password, database=setup.database)
+    cur.execute("SELECT user_id FROM stat WHERE isbanned = 1")
+    users_ban_id = cur.fetchall()
+    banned = []
+    for user_ban_id in users_ban_id:
+        banned.append(user_ban_id[0])
     cur = conn.cursor()
+    conn.commit()
+    cur.close()
     if int(tm1) - int(tm) > 600 * level:
         isSolving = False
     try:
         tester = int(message.text[6:])
-        cur.execute("SELECT user_id FROM stat WHERE isbanned = 1")
-        users_ban_id = cur.fetchall()
-        banned = []
-        for user_ban_id in users_ban_id:
-            banned.append(user_ban_id[0])
         if not isSolving and (tester == 1 or tester == 2 or tester == 3 or tester == 4):
             if message.from_user.id not in banned:
                 listQ = open("/home/matanovezno/Data/Tasks/q.txt", 'r')
@@ -260,8 +262,6 @@ def task_text(bot, message):
                          'Вказані неправильні аргументи. Аргументом може слугувати лише число від 1 до 4 включно, де число позначає складність завдання')
         except:
             pass
-    conn.commit()
-    cur.close()
 
 
 def add_task(bot, message):
