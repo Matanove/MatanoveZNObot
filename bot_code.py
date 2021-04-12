@@ -154,7 +154,7 @@ def parameters_text(bot, message):
     if time.time()-tmPar>600:
         IsParSolving = False
     if not IsParSolving and message.from_user.id not in banned:
-	IsParSolving = True
+        IsParSolving = True
 	tmPar=time.time()
         listQ = open("/home/matanovezno/Data/Tasks/q.txt", 'r')
         counter=0
