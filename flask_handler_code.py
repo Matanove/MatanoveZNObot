@@ -25,7 +25,6 @@ def webhook():
 @bot.message_handler(commands=[""'start', 'help', 'report', 'question', 'parameters',
                               'task', 'add', 'stat', 'top', 'paradd', 'ban'""])
 def command_sorting(message):
-    print(message)
     if message.chat.id != -1001382702607 and message.chat.id != -1001415917929 and message.chat.id != -1001418192939:
         # -1001288947031 test group
         if message.chat.type == 'private':
