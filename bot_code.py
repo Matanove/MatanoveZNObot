@@ -179,7 +179,7 @@ def parameters_text(bot, message):
     elif isParSolving and message.from_user.id not in banned:
         file = open(Parpath, 'rb')
         try:
-            bot.send_photo(message.chat.id, file, caption=r"Спочатку розв'яжіть запропоновану задачу!")
+            bot.send_photo(message.chat.id, file, caption=r"Спочатку розв'яжіть запропоновану задачу!", reply_to_message_id=message.message_id)
         except:
             pass
     else:
@@ -224,7 +224,7 @@ def task_text(bot, message):
                             bot.send_photo(message.chat.id, file,
                                            caption='Відповіддю є число в десятковому записі. Відповідь округлюється до трьох знаків після коми за правилами округлення.\nРівень складності: ' + str(
                                                level) + '\nПриклад: 16; -38,8; 0; 44.268. \nТермін виконання - ' + str(
-                                               level * 10) + ' хвилин')
+                                               level * 10) + ' хвилин', reply_to_message_id=message.message_id)
                         except:
                             pass
                         isSolving = True
@@ -244,7 +244,7 @@ def task_text(bot, message):
         elif isSolving:
             file = open(path, 'rb')
             try:
-                bot.send_photo(message.chat.id, file, caption=r"Спочатку розв'яжіть запропоновану задачу!")
+                bot.send_photo(message.chat.id, file, caption=r"Спочатку розв'яжіть запропоновану задачу!" , reply_to_message_id=message.message_id)
             except:
                 pass
         else:
