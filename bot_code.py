@@ -8,7 +8,8 @@ import math
 import setup
 
 q = deque()
-path = ""
+path = ''
+Parpath = ''
 isSolving = False
 isParSolving = False
 rightAnswer = 0
@@ -142,35 +143,38 @@ def question_message(bot, message):
 
 def parameters_text(bot, message):
     global tmPar
-    global IsParSolving
+    global isParSolving
     global Parpath
     conn = pymysql.connect(host=setup.host, user=setup.user, password=setup.password, database=setup.database)
     cur = conn.cursor()
     cur.execute("SELECT user_id FROM stat WHERE isbanned = 1")
     users_ban_id = cur.fetchall()
     banned = []
+    conn.commit()
+    cur.close()
     for user_ban_id in users_ban_id:
         banned.append(user_ban_id[0])
-    if time.time()-tmPar>600:
-        IsParSolving = False
-    if not IsParSolving and message.from_user.id not in banned:
-        IsParSolving = True
-        tmPar=time.time()
+    if time.time() - tmPar > 600:
+        isParSolving = False
+    if not isParSolving and message.from_user.id not in banned:
+        isParSolving = True
+        tmPar = time.time()
         listQ = open("/home/matanovezno/Data/Tasks/q.txt", 'r')
-        counter=0
-        quantity=0
+        counter = 0
+        quantity = 0
         for line in listQ:
-            counter+=1
-            if counter==5:
-                quantity=int(line)
+            counter += 1
+            if counter == 5:
+                quantity = int(line)
         a = random.randint(1, quantity)
         Parpath = r"/home/matanovezno/Data/Tasks/Questions/5/" + str(a) + ".png"
-        file = open(Parpath, 'rb')
+        file = open(Parpath, 'r')
         try:
-            bot.send_photo(message.chat.id, file, caption="Розв'язання цих задач на параметри не впливає на інтелектуальний рейтинг. Тут ви можете знайти лише вибрані задачі підвищеної складності. Викликати іншу задачу можна лише через 10 хвилин після виклику даної задачі. Відповідь автоматично не перевіряється.")
+            bot.send_photo(message.chat.id, file,
+                           caption="Розв'язання цих задач на параметри не впливає на інтелектуальний рейтинг. Тут ви можете знайти лише вибрані задачі підвищеної складності. Викликати іншу задачу можна лише через 10 хвилин після виклику даної задачі. Відповідь автоматично не перевіряється.")
         except:
             pass
-    elif IsParSolving and message.from_user.id not in banned:
+    elif isParSolving and message.from_user.id not in banned:
         file = open(Parpath, 'rb')
         try:
             bot.send_photo(message.chat.id, file, caption=r"Спочатку розв'яжіть запропоновану задачу!")
@@ -178,12 +182,9 @@ def parameters_text(bot, message):
             pass
     else:
         try:
-             bot.reply_to(message, 'Ви не можете вирішувати завдання')
+            bot.reply_to(message, 'Ви не можете вирішувати завдання')
         except:
             pass
-    conn.commit
-    cur.close
-
 
 
 def task_text(bot, message):
@@ -254,7 +255,7 @@ def task_text(bot, message):
     except:
         try:
             bot.reply_to(message,
-                     'Вказані неправильні аргументи. Аргументом може слугувати лише число від 1 до 4 включно, де число позначає складність завдання')
+                         'Вказані неправильні аргументи. Аргументом може слугувати лише число від 1 до 4 включно, де число позначає складність завдання')
         except:
             pass
     conn.commit()
@@ -304,7 +305,8 @@ def top_10(bot, message):
     cur = conn.cursor()
     if sort == "msg":
         msg = str('Рейтинг за кількістю повідомлень\n')
-        cur.execute("SELECT t1.name, t1.surname, t2.qty FROM identify=t1, stat=t2 WHERE t1.user_id = t2.user_id ORDER BY t2.qty DESC")
+        cur.execute(
+            "SELECT t1.name, t1.surname, t2.qty FROM identify=t1, stat=t2 WHERE t1.user_id = t2.user_id ORDER BY t2.qty DESC")
         top_name = cur.fetchmany(size=15)
         counter = 1
         for person in top_name:
@@ -319,7 +321,8 @@ def top_10(bot, message):
             pass
     elif sort == "intel":
         msg = str('Інтелектуальний рейтинг\n')
-        cur.execute("SELECT t1.name, t1.surname, t2.intel FROM identify=t1, stat=t2 WHERE t1.user_id = t2.user_id ORDER BY t2.intel DESC")
+        cur.execute(
+            "SELECT t1.name, t1.surname, t2.intel FROM identify=t1, stat=t2 WHERE t1.user_id = t2.user_id ORDER BY t2.intel DESC")
         top_name = cur.fetchmany(size=15)
         counter = 1
         for person in top_name:
@@ -341,6 +344,7 @@ def top_10(bot, message):
     conn.commit()
     cur.close()
 
+
 def ban_command(bot, message):
     sort = message.text[5:]
     sort = sort.replace(" ", "")
@@ -352,7 +356,8 @@ def ban_command(bot, message):
             cur.execute(f"UPDATE stat SET isbanned = 1 WHERE user_id = '{user_ban_id}'")
             msg = ''
             msg += str(message.reply_to_message.from_user.first_name) + ' '
-            msg += (str(message.reply_to_message.from_user.last_name) + ' ', '')[str(message.reply_to_message.from_user.last_name) == 'None']
+            msg += (str(message.reply_to_message.from_user.last_name) + ' ', '')[
+                str(message.reply_to_message.from_user.last_name) == 'None']
             msg += 'тепер не може вирішувати задачі'
             bot.reply_to(message, msg)
         except:
@@ -363,7 +368,8 @@ def ban_command(bot, message):
             cur.execute(f"UPDATE stat SET isbanned = 0 WHERE user_id = '{user_ban_id}'")
             msg = ''
             msg += str(message.reply_to_message.from_user.first_name) + ' '
-            msg += (str(message.reply_to_message.from_user.last_name) + ' ', '')[str(message.reply_to_message.from_user.last_name) == 'None']
+            msg += (str(message.reply_to_message.from_user.last_name) + ' ', '')[
+                str(message.reply_to_message.from_user.last_name) == 'None']
             msg += 'тепер може вирішувати задачі'
             bot.reply_to(message, msg)
         except:
@@ -391,6 +397,7 @@ def ban_list(bot, message):
             bot.reply_to(message, 'Ви можете вирішувати задачі')
     except:
         pass
+
 
 def add_param(bot, message):
     global isPAdd
@@ -456,7 +463,8 @@ def send_text(bot, message):
     except ValueError:
         isVal = False
     if isVal:
-        if isSolving and float(rnd(float(txt))) == float(rnd(float(rightAnswer))) and message.from_user.id not in banned:
+        if isSolving and float(rnd(float(txt))) == float(
+                rnd(float(rightAnswer))) and message.from_user.id not in banned:
             try:
                 bot.reply_to(message,
                              '<b>Вітаємо!</b> <i>Ви першим розв\'язали задачу рівня ' + str(level) + ' за <b>' + str(
@@ -510,8 +518,8 @@ def handle_docs_photo(bot, message):
 
 def queue(bot, message):
     if message.chat.id == -1001415917929 and message.from_user.id != 777000:  # Matanove
-    # if message.chat.id == -458266883 and message.from_user.id != 777000:    #testgroup
-    # if message.chat.id == -1001418192939 and message.from_user.id != 777000:    #troll
+        # if message.chat.id == -458266883 and message.from_user.id != 777000:    #testgroup
+        # if message.chat.id == -1001418192939 and message.from_user.id != 777000:    #troll
         q.append(message)
         while len(q) > 0:
             mssg = q.popleft()
@@ -526,7 +534,8 @@ def queue(bot, message):
             user_id_list = cur.fetchall()
             if len(user_id_list) == 1:
                 cur.execute(f"UPDATE stat SET qty = qty + 1 WHERE user_id = '{user_id}'")
-                cur.execute(f"UPDATE identify SET name = '{name_in_sql}', surname = '{surname_in_sql}' WHERE user_id = '{user_id}'")
+                cur.execute(
+                    f"UPDATE identify SET name = '{name_in_sql}', surname = '{surname_in_sql}' WHERE user_id = '{user_id}'")
             elif len(user_id_list) == 0:
                 cur.execute(f"INSERT INTO identify VALUES ('{name_in_sql}', '{surname_in_sql}', '{user_id}')")
                 cur.execute(f"INSERT INTO stat (qty, user_id) VALUES (1, '{user_id}')")
@@ -550,8 +559,8 @@ def queue(bot, message):
 
 def intelligence(bot, message, intel):
     if message.chat.id == -1001415917929 and message.from_user.id != 777000:  # Matanove
-    # if message.chat.id == -458266883 and message.from_user.id != 777000:    #testgroup
-    # if message.chat.id == -1001418192939 and message.from_user.id != 777000:    #troll
+        # if message.chat.id == -458266883 and message.from_user.id != 777000:    #testgroup
+        # if message.chat.id == -1001418192939 and message.from_user.id != 777000:    #troll
         try:
             conn = pymysql.connect(host=setup.host, user=setup.user, password=setup.password, database=setup.database)
             cur = conn.cursor()
@@ -563,4 +572,3 @@ def intelligence(bot, message, intel):
             pass
     else:
         pass
-
