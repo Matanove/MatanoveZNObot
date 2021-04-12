@@ -125,7 +125,7 @@ def help_message(bot, message):
 
 def report_message(bot, message):
     try:
-        bot.reply_to(message, '@mataner @dimaborak @Gazelka @melkii_pumba')
+        bot.reply_to(message, '@mataner @Gazelka andead422')
         bot.send_message(-1001418192939, 'Розбійник в @matan_help')
     except:
         pass
@@ -133,27 +133,55 @@ def report_message(bot, message):
 
 def question_message(bot, message):
     try:
-        bot.reply_to(message, '@mataner @dimaborak @Gazelka @melkii_pumba')
+        bot.reply_to(message, '@mataner @Gazelka andead422')
         bot.send_message(-1001418192939, 'Дебіл в @matan_help')
     except:
         pass
 
 
 def parameters_text(bot, message):
-	global tmpar
-	if time.time()-tmpar>600:
-		tmpar=time.time()
-		listQ = open("/home/matanovezno/Data/Tasks/q.txt", 'r')
-		counter=0
-		quantity=0
-		for line in listQ:
-			counter+=1
-			if counter==5:
-				quantity=int(line)
-		a = random.randint(1, quantity)
-		pth = r"/home/matanovezno/Data/Tasks/Questions/5/" + str(a) + ".png"
-		file = open(pth, 'rb')
-		bot.send_photo(message.chat.id, file, caption="Розв'язання цих задач на параметри не впливає на інтелектуальний рейтинг. Тут ви можете знайти лише вибрані задачі підвищеної складності. Викликати іншу задачу можна лише через 10 хвилин після виклику даної задачі. Відповідь автоматично не перевіряється.")
+    global tmPar
+    global IsParSolving
+    global Parpath
+    conn = pymysql.connect(host=setup.host, user=setup.user, password=setup.password, database=setup.database)
+    cur = conn.cursor()
+    cur.execute("SELECT user_id FROM stat WHERE isbanned = 1")
+    users_ban_id = cur.fetchall()
+    banned = []
+    for user_ban_id in users_ban_id:
+        banned.append(user_ban_id[0])
+    if time.time()-tmPar>600:
+        IsParSolving = False
+    if not IsParSolving and message.from_user.id not in banned:
+        tmPar=time.time()
+        listQ = open("/home/matanovezno/Data/Tasks/q.txt", 'r')
+        counter=0
+        quantity=0
+        for line in listQ:
+            counter+=1
+            if counter==5:
+                quantity=int(line)
+        a = random.randint(1, quantity)
+        Parpath = r"/home/matanovezno/Data/Tasks/Questions/5/" + str(a) + ".png"
+        file = open(Parpath, 'rb')
+        try:
+            bot.send_photo(message.chat.id, file, caption="Розв'язання цих задач на параметри не впливає на інтелектуальний рейтинг. Тут ви можете знайти лише вибрані задачі підвищеної складності. Викликати іншу задачу можна лише через 10 хвилин після виклику даної задачі. Відповідь автоматично не перевіряється.")
+        except:
+            pass
+    elif IsParSolving and message.from_user.id not in banned:
+        file = open(Parpath, 'rb')
+        try:
+            bot.send_photo(message.chat.id, file, caption=r"Спочатку розв'яжіть запропоновану задачу!")
+        except:
+            pass
+    else:
+        try:
+             bot.reply_to(message, 'Ви не можете вирішувати завдання')
+        except:
+            pass
+    conn.commit
+    cur.close
+	    
 
 
 def task_text(bot, message):
